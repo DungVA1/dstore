@@ -1,8 +1,34 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "tsConfigPath": "tsconfig.json"
+  },
+  "projects": {
+    "gateway": {
+      "type": "application",
+      "root": "src/apps/api-gateway",
+      "entryFile": "apps/api-gateway/main",
+      "sourceRoot": "src"
+    },
+    "auth": {
+      "type": "application",
+      "root": "src/apps/auth-service",
+      "entryFile": "apps/auth-service/main",
+      "sourceRoot": "src"
+    },
+    "user": {
+      "type": "application",
+      "root": "src/apps/user-service",
+      "entryFile": "apps/user-service/main",
+      "sourceRoot": "src"
+    },
+    "order": {
+      "type": "application",
+      "root": "src/apps/order-service",
+      "entryFile": "apps/order-service/main",
+      "sourceRoot": "src"
+    }
   }
 }
