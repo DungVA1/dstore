@@ -1,19 +1,22 @@
-export class UserEmail {
-  private value: string;
+import { BasedObjectValue } from '@common/based.object-values';
 
+export class EmailAddress extends BasedObjectValue {
+  private readonly emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   constructor(value: string) {
-    this.value = value;
+    super(value.trim().toLowerCase());
   }
 
-  get(): string {
-    return this.value;
+  isValid(): boolean {
+    return this.emailRegex.test(this.value);
   }
 }
 
-export class UserId {
-  private value: string;
+export class UserId extends BasedObjectValue {
+  constructor(value: string) {
+    super(value.trim().toLowerCase());
+  }
 
-  get(): string {
-    return this.value;
+  isValid(): boolean {
+    return this.value.length > 0 && this.value.length < 20;
   }
 }
