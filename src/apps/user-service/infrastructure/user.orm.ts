@@ -54,7 +54,7 @@ export class UserModel extends BasedModel {
     name: 'type',
     type: 'varchar',
     nullable: false,
-    default: 'User',
+    default: 'USER',
   })
   type: string;
 
