@@ -1,4 +1,4 @@
-import { IMapper } from '@common/interface/mapper.interface';
+import { IMapper } from '@common/based.mapper';
 
 import { UserEntity } from '../domain/user.entity';
 
