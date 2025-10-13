@@ -2,7 +2,7 @@ import { IMapper } from '@common/based.mapper';
 
 import { UserEntity } from '../domain/user.entity';
 
-import { UserModel } from './user.orm';
+import { UserModel } from './user.model';
 
 export class UserMapper implements IMapper {
   toEntity(userOrm: UserModel): UserEntity {

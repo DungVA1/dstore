@@ -5,7 +5,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { GetUserQueryHandler } from './application/query/get-user/execute';
-import { UserModel } from './infrastructure/user.orm';
+import { UserModel } from './infrastructure/user.model';
 import { UserRepository } from './infrastructure/user.repository';
 import { UserController } from './presentation/user.controller';
 

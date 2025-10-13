@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 
 import { IUserRepository } from '../application/user-repository.interface';
 
-import { UserModel } from './user.orm';
+import { UserModel } from './user.model';
 
 export class UserRepository implements IUserRepository {
   constructor(

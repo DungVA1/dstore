@@ -1,4 +1,4 @@
-import { UserModel } from '../infrastructure/user.orm';
+import { UserModel } from '../infrastructure/user.model';
 
 export interface IUserRepository {
   save(userModel: UserModel): Promise<UserModel>;

@@ -1,4 +1,4 @@
-import { UserModel } from '@apps/user-service/infrastructure/user.orm';
+import { UserModel } from '@apps/user-service/infrastructure/user.model';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,7 +14,7 @@ import { DataSourceOptions } from 'typeorm';
           host: configService.get('database.host'),
           port: +configService.get('database.port'),
           username: configService.get('database.userName'),
-          password: configService.get('database.password') as string,
+          password: configService.get('database.password'),
           database: configService.get('database.database'),
           entities: [UserModel],
           migrations: ['dist/libs/database/migrations/*.js'],
