@@ -27,18 +27,18 @@ export class UserController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Get(':id')
-  getDetail(id: string) {
-    return this.queryBus.execute(new GetUserQuery(id));
-  }
-
   @Get()
   getList(
-    @Query('limit', new ParseIntPipe()) limit: number,
-    @Query('page', new ParseIntPipe()) page: number,
+    @Query('limit') limit: number,
+    @Query('page') page: number,
     @Query('sort') sort: string,
   ) {
     return this.queryBus.execute(new GetUsersQuery(limit, page, sort));
+  }
+
+  @Get(':id')
+  getDetail(id: string) {
+    return this.queryBus.execute(new GetUserQuery(id));
   }
 
   @Post()

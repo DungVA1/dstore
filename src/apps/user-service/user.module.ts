@@ -5,7 +5,10 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { GetUserQueryHandler } from './application/query/get-user/get-user.handler';
+import { CreateUserHandler } from './application/command/create-user/create-user.handler';
+import { DeleteUserHandler } from './application/command/delete-user/delete-user.handler';
+import { UpdateUserHandler } from './application/command/update-user/update-user.handler';
+import { GetUserHandler, GetUsersHandler } from './application/query';
 import { UserModel } from './infrastructure/user.model';
 import { UserRepository } from './infrastructure/user.repository';
 import { UserController } from './presentation/user.controller';
@@ -20,11 +23,15 @@ import { UserController } from './presentation/user.controller';
   controllers: [UserController],
   providers: [
     LoggerService,
-    GetUserQueryHandler,
     {
       provide: 'IUserRepository',
       useClass: UserRepository,
     },
+    GetUserHandler,
+    GetUsersHandler,
+    CreateUserHandler,
+    UpdateUserHandler,
+    DeleteUserHandler,
   ],
 })
 export class UserAppModule {}

@@ -1,12 +1,12 @@
 import { UserMapper } from '@apps/user-service/infrastructure/user.mapper';
-import { Inject, Injectable } from '@nestjs/common';
-import { ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { IUserRepository } from '../../user-repository.interface';
 
 import { UpdateUserCommand } from './update-user.command';
 
-@Injectable()
+@CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
     @Inject('IUserRepository') private readonly repo: IUserRepository,

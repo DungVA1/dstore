@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ICommandHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { IUserRepository } from '../../user-repository.interface';
 
 import { DeleteUserCommand } from './delete-user.command';
 
-@Injectable()
+@CommandHandler(DeleteUserCommand)
 export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   constructor(
     @Inject('IUserRepository') private readonly repo: IUserRepository,
