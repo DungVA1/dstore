@@ -1,5 +1,5 @@
 import { LoggerService } from '@libs/log/logger.service';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
@@ -12,6 +12,9 @@ const bootstrap = async () => {
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(
+    new ValidationPipe({ always: true, transform: true, whitelist: true }),
+  );
 
   const port: number = configService.get('app.user.port') as number;
   const appName: string = configService.get('app.user.name') as string;

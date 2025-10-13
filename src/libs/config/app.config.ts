@@ -13,4 +13,11 @@ export default () => ({
       port: process.env.USER_SERVICE_PORT || 3002,
     },
   },
+  database: {
+    host: process.env.POSTGRESQL_HOST,
+    port: process.env.POSTGRESQL_PORT,
+    userName: process.env.POSTSQL_USERNAME,
+    password: process.env.POSTSQL_PASSWORD,
+    database: process.env.POSTGRESQL_DATABASE,
+  },
 });

@@ -1,19 +1,13 @@
-import { Controller, Get, Post } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get } from '@nestjs/common';
+import { QueryBus } from '@nestjs/cqrs';
 
-import { UserCreateDTO } from './dto/user-create.dto';
+import { GetUserQuery } from '../application/query/get-user/query';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly configService: ConfigService) {}
-  users: UserCreateDTO[] = [];
-  @Get()
-  getList(): UserCreateDTO[] {
-    return this.users;
-  }
-
-  @Post()
-  createUser(userDto: UserCreateDTO) {
-    this.users.push(userDto);
+  constructor(private readonly queryBus: QueryBus) {}
+  @Get(':id')
+  getDetail(id: string) {
+    return this.queryBus.execute(new GetUserQuery(id));
   }
 }
