@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 
-import { GetUserQuery } from '../application/query/get-user/query';
+import { GetUserQuery } from '../application/query/get-user/get-user.query';
 
 @Controller('users')
 export class UserController {

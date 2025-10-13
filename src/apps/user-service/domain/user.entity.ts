@@ -45,7 +45,6 @@ export class UserEntity extends BasedEntity {
     email: string;
     password: string;
     phone?: string;
-    status: UserStatus;
     type: UserType;
   }): UserEntity {
     const now = new Date();

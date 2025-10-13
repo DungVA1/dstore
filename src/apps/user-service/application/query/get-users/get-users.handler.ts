@@ -1,0 +1,21 @@
+import { Inject } from '@nestjs/common';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { IUserRepository } from '../../user-repository.interface';
+
+import { GetUsersQuery } from './get-users.query';
+
+@QueryHandler(GetUsersQuery)
+export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
+  constructor(
+    @Inject('IUserRepository') private readonly userRepo: IUserRepository,
+  ) {}
+  async execute(query: GetUsersQuery): Promise<any> {
+    const users = await this.userRepo.getList({
+      limit: query.limit,
+      skip: query.page * query.limit,
+    });
+
+    return users;
+  }
+}

@@ -3,11 +3,11 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
-import { AppModule } from './app.module';
+import { UserAppModule } from './user.module';
 const logger = new Logger('User');
 
 const bootstrap = async () => {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(UserAppModule);
   const configService = app.get(ConfigService);
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);

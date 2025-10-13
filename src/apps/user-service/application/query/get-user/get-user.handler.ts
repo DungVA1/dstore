@@ -3,10 +3,10 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { IUserRepository } from '../../user-repository.interface';
 
-import { GetUserQuery } from './query';
+import { GetUserQuery } from './get-user.query';
 
 @QueryHandler(GetUserQuery)
-export class GetUserQueryHandler implements IQueryHandler<GetUserQuery> {
+export class GetUserHandler implements IQueryHandler<GetUserQuery> {
   constructor(
     @Inject('IUserRepository') private readonly userRepo: IUserRepository,
   ) {}
