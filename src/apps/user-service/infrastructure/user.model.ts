@@ -69,14 +69,14 @@ export class UserModel extends BasedModel {
 
   @CreateDateColumn({
     name: 'created_at',
-    type: 'datetime',
+    type: 'timestamp',
     nullable: false,
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'datetime',
+    type: 'timestamp',
     nullable: false,
   })
   updatedAt: Date;
