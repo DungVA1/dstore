@@ -4,7 +4,7 @@ enum UserGender {
   UNSPECIFIED = 'unspecified',
 }
 
-export class UserCreateDTO {
+export class CreateUserDTO {
   name: string;
   email: string;
   password: string;
