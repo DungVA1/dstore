@@ -1,4 +1,4 @@
-import { INTERNAL_ERROR_SERVER } from '@apps/user-service/common/user.error';
+import { INTERNAL_ERROR_SERVER } from '@apps/user-service/common/user.error-code';
 import { HttpStatus } from '@nestjs/common';
 
 export type Result<T, E extends Error = Error> =

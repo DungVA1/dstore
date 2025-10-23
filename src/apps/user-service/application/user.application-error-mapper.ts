@@ -1,8 +1,13 @@
 import { DomainError } from '@common/based.error';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { INVALID_EMAIL } from '../common/user.error';
+import { INVALID_EMAIL } from '../common/user.error-code';
 
+/**
+ * Function to map from domain error to http exception based on error code
+ * @param e error passed from domain
+ * @returns a http exception to response for client
+ */
 export default function mapDomainErrorToHttpException(
   e: DomainError,
 ): HttpException {

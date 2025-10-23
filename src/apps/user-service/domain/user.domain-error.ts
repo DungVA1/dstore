@@ -1,6 +1,6 @@
 import { DomainError } from '@common/based.error';
 
-import { INVALID_EMAIL, INVALID_ID } from '../common/user.error';
+import { INVALID_EMAIL, INVALID_ID } from '../common/user.error-code';
 
 export class InvalidEmailError extends DomainError {
   constructor(email?: string) {
