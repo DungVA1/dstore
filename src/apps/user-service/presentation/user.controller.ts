@@ -15,6 +15,7 @@ import { DeleteUserCommand } from '../application/command/delete-user/delete-use
 import { UpdateUserCommand } from '../application/command/update-user/update-user.command';
 import { GetUsersQuery } from '../application/query';
 import { GetUserQuery } from '../application/query/get-user/get-user.query';
+import { UserEntity } from '../domain/user.entity';
 
 import { CreateUserDTO } from './dto/create-user.dto';
 import { GetListUserQueryDTO } from './dto/get-list-users.dto';
@@ -28,10 +29,14 @@ export class UserController {
   ) {}
 
   @Get()
-  getList(@Query() query: GetListUserQueryDTO) {
-    return this.queryBus.execute(
+  async getList(@Query() query: GetListUserQueryDTO) {
+    const users: UserEntity[] = await this.queryBus.execute(
       new GetUsersQuery(query.limit, query.page, query.sort, query.search),
     );
+
+    return {
+      data: users,
+    };
   }
 
   @Get(':id')

@@ -13,7 +13,7 @@ export class GetUsersHandler implements IQueryHandler<GetUsersQuery> {
   async execute(query: GetUsersQuery): Promise<any> {
     const users = await this.userRepo.getList({
       limit: query.limit,
-      skip: query.page * query.limit,
+      skip: (query.page - 1) * query.limit,
     });
 
     return users;
