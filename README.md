@@ -1,22 +1,23 @@
 ## Description
 
-This project serves for my learning purpose about System Design as well as build a code base follow DDD (Domain-Driven Design), I also follow CQRS (Command-Query Responsibility Segregation) pattern to involve relate parts via Command or Query.
-For high level design, I approach microservices architecture and use Kafka as a communication channel between services.
+This project is part of my learning journey in System Design and aims to build a solid codebase following Domain-Driven Design (DDD) principles. I also apply the CQRS (Command-Query Responsibility Segregation) pattern to clearly separate command and query responsibilities, allowing services to interact through Commands or Queries.
 
-With this project, I will try build a fully project contains Observability use Prometheuse for collect metrics, Grafana for visuallize metrics, Jeager for tracing, Loki for logging and Opentelemetry for general channel among them. I also use docker to encapsolate my source code into a image for easy share and delivery my result, use K8s for orchestration and manager my containers, Helm chart for easy release or upgrade my applications on K8s.
+At a high level, I adopt a microservices architecture, using Kafka as the communication channel between services.
 
-About CICD, I will use github action or gitlab ci for intergration automatically for each merge to main or master branch, along with I will use ArgoCD for auto deploy my application will latest image version each I release/merge my code.
+For observability, I plan to implement a complete stack including Prometheus for metrics collection, Grafana for visualization, Jaeger for distributed tracing, Loki for centralized logging, and OpenTelemetry as the unified instrumentation layer connecting them.
 
-I also use EKS which is an AWS service to deploy my application onto it and expose my application to outside internet.
+The project will be containerized using Docker for easier sharing and deployment, and Kubernetes (K8s) will be used for orchestration and container management. I’ll also use Helm charts to simplify application releases and upgrades on Kubernetes.
 
-For more detail, let see following.
+Regarding CI/CD, I’ll integrate GitHub Actions or GitLab CI for automated builds and testing on each merge to the main/master branch. Additionally, ArgoCD will handle continuous deployment, automatically syncing and deploying the latest container images after each release.
+
+Finally, the application will be deployed on Amazon EKS (Elastic Kubernetes Service) and exposed to the internet through appropriate networking and load balancing configurations.
 
 ## Prerequisites
 
-NodeJS v22.16.0
-Docker
-AWS account
-Kubectl
+- NodeJS v22.16.0
+- Docker
+- AWS account
+- Kubectl
 
 ## Project setup
 
