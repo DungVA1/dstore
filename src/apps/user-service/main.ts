@@ -13,7 +13,12 @@ const bootstrap = async () => {
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
-    new ValidationPipe({ always: true, transform: true, whitelist: true }),
+    new ValidationPipe({
+      always: true,
+      transform: true,
+      whitelist: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
   );
 
   const port: number = configService.get('app.user.port') as number;

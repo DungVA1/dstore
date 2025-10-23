@@ -17,6 +17,7 @@ import { GetUsersQuery } from '../application/query';
 import { GetUserQuery } from '../application/query/get-user/get-user.query';
 
 import { CreateUserDTO } from './dto/create-user.dto';
+import { GetListUserQueryDTO } from './dto/get-list-users.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller('users')
@@ -27,12 +28,10 @@ export class UserController {
   ) {}
 
   @Get()
-  getList(
-    @Query('limit') limit: number,
-    @Query('page') page: number,
-    @Query('sort') sort: string,
-  ) {
-    return this.queryBus.execute(new GetUsersQuery(limit, page, sort));
+  getList(@Query() query: GetListUserQueryDTO) {
+    return this.queryBus.execute(
+      new GetUsersQuery(query.limit, query.page, query.sort, query.search),
+    );
   }
 
   @Get(':id')
