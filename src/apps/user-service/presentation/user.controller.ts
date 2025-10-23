@@ -1,3 +1,4 @@
+import { SuccessResponse } from '@common/based.response';
 import {
   Body,
   Controller,
@@ -34,9 +35,7 @@ export class UserController {
       new GetUsersQuery(query.limit, query.page, query.sort, query.search),
     );
 
-    return {
-      data: users,
-    };
+    return new SuccessResponse(users);
   }
 
   @Get(':id')
