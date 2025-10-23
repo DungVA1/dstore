@@ -5,9 +5,8 @@ export abstract class BasedObjectValue {
     this.value = value;
   }
 
-  getValue(): string {
+  abstract get isValid(): boolean;
+  toString(): string {
     return this.value;
   }
-
-  abstract isValid(): boolean;
 }

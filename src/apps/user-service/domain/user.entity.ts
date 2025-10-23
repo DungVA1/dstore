@@ -1,4 +1,5 @@
 import { BasedEntity } from '@common/based.entity';
+import { DomainError, err, ok, Result } from '@common/based.error';
 
 import { UserStatus } from '../common/user.enum';
 import { UserType } from '../common/user.type';
@@ -46,15 +47,15 @@ export class UserEntity extends BasedEntity {
     password: string;
     phone?: string;
     type: UserType;
-  }): UserEntity {
+  }): Result<UserEntity, DomainError> {
     const now = new Date();
-    const emailAddress = new EmailAddress(params.email);
-    if (!emailAddress.isValid()) {
-      throw new Error('Email address is not valid');
+    const emailAddress = EmailAddress.create(params.email);
+    if (!emailAddress.ok) {
+      return err(emailAddress.error);
     }
     const user = new UserEntity({
       name: params.name,
-      email: emailAddress,
+      email: emailAddress.value,
       password: params.password,
       phone: params.phone,
       status: UserStatus.PENDING,
@@ -63,7 +64,7 @@ export class UserEntity extends BasedEntity {
       updatedAt: now,
     });
 
-    return user;
+    return ok(user);
   }
 
   markActive() {
@@ -109,9 +110,9 @@ export class UserEntity extends BasedEntity {
     updatedAt: Date;
   }) {
     return new UserEntity({
-      id: new UserId(params.id),
+      id: UserId.parse(params.id),
       name: params.name,
-      email: new EmailAddress(params.email),
+      email: EmailAddress.parse(params.email),
       password: params.password,
       phone: params.phone,
       type: params.type as UserType,
@@ -123,7 +124,7 @@ export class UserEntity extends BasedEntity {
 
   // #region: get fnc
   get id() {
-    return this._id?.getValue();
+    return this._id?.toString();
   }
 
   get name(): string {
@@ -131,7 +132,7 @@ export class UserEntity extends BasedEntity {
   }
 
   get email(): string {
-    return this._email.getValue();
+    return this._email.toString();
   }
 
   get password(): string {
