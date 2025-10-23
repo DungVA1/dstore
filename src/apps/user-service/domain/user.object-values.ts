@@ -1,20 +1,7 @@
-import { DomainError, err, ok, Result } from '@common/based.error';
+import { err, ok, Result } from '@common/based.error';
 import { BasedObjectValue } from '@common/based.object-values';
 
-class InvalidEmailError extends DomainError {
-  constructor(email?: string) {
-    const moreInfo = email ?? '';
-    super('INVALID_EMAIL', `Invalid email ${moreInfo}`, 400);
-  }
-}
-
-class InvalidIdError extends DomainError {
-  constructor(id?: string) {
-    const moreInfo = id ?? '';
-    super('INVALID_ID', `Invalid id ${moreInfo}`, 400);
-  }
-}
-
+import { InvalidEmailError, InvalidIdError } from './user.domain-error';
 export class EmailAddress extends BasedObjectValue {
   private readonly emailPattern = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   private constructor(value: string) {

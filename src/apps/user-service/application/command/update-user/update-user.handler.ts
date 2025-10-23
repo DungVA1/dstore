@@ -2,6 +2,7 @@ import { UserMapper } from '@apps/user-service/infrastructure/user.mapper';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { UserNotFoundError } from '../../user.application-error';
 import { IUserRepository } from '../../user-repository.interface';
 
 import { UpdateUserCommand } from './update-user.command';
@@ -14,7 +15,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   async execute(command: UpdateUserCommand): Promise<any> {
     const user = await this.repo.getById(command.id);
     if (!user) {
-      throw new Error('User not found');
+      throw new UserNotFoundError(command.id);
     }
 
     const mapper = new UserMapper();
