@@ -1,3 +1,4 @@
+import { AccountModel } from '@apps/auth-service/infrastructure/account.model';
 import { UserModel } from '@apps/user-service/infrastructure/user.model';
 import * as dotenv from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
@@ -11,8 +12,8 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.POSTGRESQL_USERNAME,
   password: process.env.POSTGRESQL_PASSWORD,
   database: process.env.POSTGRESQL_DATABASE,
-  entities: [UserModel],
-  migrations: ['dist/libs/database/migrations/*.js'],
+  entities: [UserModel, AccountModel],
+  migrations: ['dist/apps/**/infrastructure/migrations/*.js'],
   synchronize: false,
 };
 

@@ -5,7 +5,7 @@ export abstract class BasedObjectValue {
     this.value = value;
   }
 
-  abstract get isValid(): boolean;
+  protected abstract get isValid(): boolean;
   toString(): string {
     return this.value;
   }
