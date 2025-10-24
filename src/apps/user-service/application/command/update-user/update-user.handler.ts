@@ -20,9 +20,6 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
     const mapper = new UserMapper();
     const userEntity = mapper.toEntity(user);
-    if (command.password) {
-      userEntity.changePassword(command.password);
-    }
 
     if (command.name) {
       userEntity.rename(command.name);

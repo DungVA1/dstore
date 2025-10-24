@@ -10,7 +10,7 @@ export class UserEntity extends BasedEntity {
   private _id?: UserId;
   private _name: string;
   private _email: EmailAddress;
-  private _password: string;
+  private _identityId: string;
   private _phone?: string;
   private _type: UserType;
   private _status: UserStatus;
@@ -21,7 +21,7 @@ export class UserEntity extends BasedEntity {
     id?: UserId;
     name: string;
     email: EmailAddress;
-    password: string;
+    identityId: string;
     phone?: string;
     status: UserStatus;
     type: UserType;
@@ -33,7 +33,7 @@ export class UserEntity extends BasedEntity {
     this._id = params.id;
     this._name = params.name;
     this._email = params.email;
-    this._password = params.password;
+    this._identityId = params.identityId;
     this._phone = params.phone;
     this._status = params.status;
     this._type = params.type;
@@ -42,9 +42,9 @@ export class UserEntity extends BasedEntity {
   }
 
   static create(params: {
+    identityId: string;
     name: string;
     email: string;
-    password: string;
     phone?: string;
     type: UserType;
   }): Result<UserEntity, DomainError> {
@@ -56,7 +56,7 @@ export class UserEntity extends BasedEntity {
     const user = new UserEntity({
       name: params.name,
       email: emailAddress.value,
-      password: params.password,
+      identityId: params.identityId,
       phone: params.phone,
       status: UserStatus.PENDING,
       type: params.type,
@@ -74,11 +74,6 @@ export class UserEntity extends BasedEntity {
 
   markBlocked() {
     this._status = UserStatus.BLOCKED;
-    this.touch();
-  }
-
-  changePassword(hashPassword: string) {
-    this._password = hashPassword;
     this.touch();
   }
 
@@ -102,7 +97,7 @@ export class UserEntity extends BasedEntity {
     id: string;
     name: string;
     email: string;
-    password: string;
+    identityId: string;
     phone: string;
     type: string;
     status: string;
@@ -111,9 +106,9 @@ export class UserEntity extends BasedEntity {
   }) {
     return new UserEntity({
       id: UserId.parse(params.id),
+      identityId: params.identityId,
       name: params.name,
       email: EmailAddress.parse(params.email),
-      password: params.password,
       phone: params.phone,
       type: params.type as UserType,
       status: params.status as UserStatus,
@@ -135,8 +130,8 @@ export class UserEntity extends BasedEntity {
     return this._email.toString();
   }
 
-  get password(): string {
-    return this._password;
+  get identityId(): string {
+    return this._identityId;
   }
 
   get phone(): string | undefined {
