@@ -37,11 +37,11 @@ export class UserModel extends BasedModel {
   email: string;
 
   @Column({
-    name: 'password',
+    name: 'identity_id',
     type: 'varchar',
     nullable: false,
   })
-  password: string;
+  identityId: string;
 
   @Column({
     name: 'phone',

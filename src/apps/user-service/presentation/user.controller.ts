@@ -48,8 +48,8 @@ export class UserController {
     await this.commandBus.execute(
       new CreateUserCommand(
         Math.random().toString(),
+        createUserDto.identityId,
         createUserDto.email,
-        createUserDto.password,
         createUserDto.name,
         createUserDto.phone,
       ),
@@ -65,7 +65,6 @@ export class UserController {
       new UpdateUserCommand(
         id,
         updateUserDTO.email,
-        updateUserDTO.password,
         updateUserDTO.name,
         updateUserDTO.phone,
       ),

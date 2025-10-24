@@ -5,9 +5,9 @@ enum UserGender {
 }
 
 export class CreateUserDTO {
+  identityId: string;
   name: string;
   email: string;
-  password: string;
   bod: Date;
   phone: string;
   address: string;
