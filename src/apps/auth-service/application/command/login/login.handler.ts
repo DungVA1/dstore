@@ -1,6 +1,7 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { err, ok } from '@common/based.error';
+import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { IAccountRepository } from '../../account-repository.interface';
@@ -9,9 +10,11 @@ import { LoginCommand } from './login.command';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
-  constructor(private readonly accountRepo: IAccountRepository) {}
+  constructor(
+    @Inject('IAccountRepository') private readonly repo: IAccountRepository,
+  ) {}
   async execute(command: LoginCommand): Promise<any> {
-    const accountModel = await this.accountRepo.getByEmail(command.email);
+    const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {
       return err(new Error('ACCOUNT_NOT_EXISTS'));
     }

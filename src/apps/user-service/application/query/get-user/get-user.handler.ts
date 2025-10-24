@@ -8,10 +8,10 @@ import { GetUserQuery } from './get-user.query';
 @QueryHandler(GetUserQuery)
 export class GetUserHandler implements IQueryHandler<GetUserQuery> {
   constructor(
-    @Inject('IUserRepository') private readonly userRepo: IUserRepository,
+    @Inject('IUserRepository') private readonly repo: IUserRepository,
   ) {}
   async execute(query: GetUserQuery): Promise<any> {
-    const user = await this.userRepo.getById(query.id);
+    const user = await this.repo.getById(query.id);
 
     if (!user) {
       throw new Error('User not found');
