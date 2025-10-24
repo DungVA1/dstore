@@ -22,6 +22,9 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     }
 
     // check password
+    if (account.password !== command.password) {
+      return err(new Error('PASSWORD_IS_WRONG'));
+    }
 
     return ok({
       accessToken: 'fake-access-token',
