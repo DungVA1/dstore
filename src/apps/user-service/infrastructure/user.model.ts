@@ -9,7 +9,7 @@ import {
 
 import { UserStatus } from '../common/user.enum';
 
-@Entity('users')
+@Entity('user')
 export class UserModel extends BasedModel {
   @PrimaryColumn({
     name: 'id',
@@ -19,6 +19,13 @@ export class UserModel extends BasedModel {
     nullable: false,
   })
   id: string;
+
+  @Column({
+    name: 'account_id',
+    type: 'varchar',
+    nullable: false,
+  })
+  accountId: string;
 
   @Column({
     name: 'name',
@@ -35,13 +42,6 @@ export class UserModel extends BasedModel {
     length: 30,
   })
   email: string;
-
-  @Column({
-    name: 'identity_id',
-    type: 'varchar',
-    nullable: false,
-  })
-  identityId: string;
 
   @Column({
     name: 'phone',

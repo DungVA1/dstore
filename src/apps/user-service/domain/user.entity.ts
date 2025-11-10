@@ -10,7 +10,7 @@ export class UserEntity extends BasedEntity {
   private _id?: UserId;
   private _name: string;
   private _email: EmailAddress;
-  private _identityId: string;
+  private _accountId: string;
   private _phone?: string;
   private _type: UserType;
   private _status: UserStatus;
@@ -21,7 +21,7 @@ export class UserEntity extends BasedEntity {
     id?: UserId;
     name: string;
     email: EmailAddress;
-    identityId: string;
+    accountId: string;
     phone?: string;
     status: UserStatus;
     type: UserType;
@@ -33,7 +33,7 @@ export class UserEntity extends BasedEntity {
     this._id = params.id;
     this._name = params.name;
     this._email = params.email;
-    this._identityId = params.identityId;
+    this._accountId = params.accountId;
     this._phone = params.phone;
     this._status = params.status;
     this._type = params.type;
@@ -42,7 +42,7 @@ export class UserEntity extends BasedEntity {
   }
 
   static create(params: {
-    identityId: string;
+    accountId: string;
     name: string;
     email: string;
     phone?: string;
@@ -56,7 +56,7 @@ export class UserEntity extends BasedEntity {
     const user = new UserEntity({
       name: params.name,
       email: emailAddress.value,
-      identityId: params.identityId,
+      accountId: params.accountId,
       phone: params.phone,
       status: UserStatus.PENDING,
       type: params.type,
@@ -97,7 +97,7 @@ export class UserEntity extends BasedEntity {
     id: string;
     name: string;
     email: string;
-    identityId: string;
+    accountId: string;
     phone: string;
     type: string;
     status: string;
@@ -106,7 +106,7 @@ export class UserEntity extends BasedEntity {
   }) {
     return new UserEntity({
       id: UserId.parse(params.id),
-      identityId: params.identityId,
+      accountId: params.accountId,
       name: params.name,
       email: EmailAddress.parse(params.email),
       phone: params.phone,
@@ -130,8 +130,8 @@ export class UserEntity extends BasedEntity {
     return this._email.toString();
   }
 
-  get identityId(): string {
-    return this._identityId;
+  get accountId(): string {
+    return this._accountId;
   }
 
   get phone(): string | undefined {
