@@ -39,7 +39,7 @@ export class UserController {
   }
 
   @Get(':id')
-  getDetail(id: string) {
+  getDetail(@Param('id') id: string) {
     return this.queryBus.execute(new GetUserQuery(id));
   }
 
