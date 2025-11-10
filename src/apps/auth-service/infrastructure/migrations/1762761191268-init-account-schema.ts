@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitAccountSchema1700000000001 implements MigrationInterface {
+export class InitAccountSchema1762761191268 implements MigrationInterface {
   async up(q: QueryRunner): Promise<void> {
     await q.query(`
       CREATE TABLE IF NOT EXISTS account (

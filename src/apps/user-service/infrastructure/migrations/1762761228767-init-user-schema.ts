@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitUserSchema1700000000000 implements MigrationInterface {
+export class InitUserSchema1762761228767 implements MigrationInterface {
   async up(q: QueryRunner): Promise<void> {
     await q.query(`
       CREATE TABLE IF NOT EXISTS user (

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedAccount1761240802692 implements MigrationInterface {
+export class SeedAccount1762761215648 implements MigrationInterface {
   async up(q: QueryRunner): Promise<void> {
     await q.query(`
       INSERT INTO account (id, email, password, status, role)
