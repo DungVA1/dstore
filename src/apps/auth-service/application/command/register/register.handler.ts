@@ -1,5 +1,6 @@
 import { AccountEntity } from '@apps/auth-service/domain/account.entity';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
+import { SuccessResponse } from '@common/based.response';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -29,6 +30,6 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     const mapper = new AccountMapper();
     await this.repo.save(mapper.toModel(accountEntity));
 
-    return accountEntity;
+    return new SuccessResponse({ email: command.email });
   }
 }

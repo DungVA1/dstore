@@ -1,9 +1,14 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
-import { err, ok } from '@common/based.error';
+import { SuccessResponse } from '@common/based.response';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import {
+  AccountIsNotActivedError,
+  EmailNotExistedError,
+  EmailOrPasswordIsWrongError,
+} from '../../account-application.error';
 import { IAccountRepository } from '../../account-repository.interface';
 
 import { LoginCommand } from './login.command';
@@ -16,20 +21,20 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   async execute(command: LoginCommand): Promise<any> {
     const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {
-      return err(new Error('ACCOUNT_NOT_EXISTS'));
+      throw new EmailNotExistedError();
     }
     const mapper = new AccountMapper();
     const account = mapper.toEntity(accountModel);
     if (account.status !== AccountStatus.ACTIVE) {
-      return err(new Error('ACCOUNT_NOT_ACTIVE'));
+      throw new AccountIsNotActivedError();
     }
 
     // check password
     if (account.password !== command.password) {
-      return err(new Error('PASSWORD_IS_WRONG'));
+      throw new EmailOrPasswordIsWrongError();
     }
 
-    return ok({
+    return new SuccessResponse({
       accessToken: 'fake-access-token',
       refreshToke: 'fake-refresh-token',
     });

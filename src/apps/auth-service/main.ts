@@ -1,3 +1,4 @@
+import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
 import { LoggerService } from '@libs/log/logger.service';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -13,6 +14,7 @@ const bootstrap = async () => {
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       always: true,
