@@ -23,6 +23,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
       throw new EmailAlreadyUsedError();
     }
 
+    // TODO: send verification email with code to user
     const verificationCode = Math.round(Math.random() * 1000000).toString();
     const current = new Date();
     const accountEntity = AccountEntity.create({
