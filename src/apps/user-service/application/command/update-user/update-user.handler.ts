@@ -29,6 +29,6 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
       userEntity.changePhoneNumber(command.phone);
     }
 
-    await this.repo.updated(command.id, mapper.toModel(userEntity));
+    await this.repo.update(command.id, mapper.toModel(userEntity));
   }
 }

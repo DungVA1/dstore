@@ -17,7 +17,7 @@ export class UserRepository implements IUserRepository {
     return userModel;
   }
 
-  async updated(id: string, userModel: UserModel): Promise<UserModel> {
+  async update(id: string, userModel: UserModel): Promise<UserModel> {
     await this.userRepo.update({ id }, userModel);
 
     return userModel;

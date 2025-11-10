@@ -5,5 +5,5 @@ export interface IUserRepository {
   getById(id: string): Promise<UserModel | null>;
   getList(options): Promise<UserModel[]>;
   delete(id: string): Promise<void>;
-  updated(id: string, userModel: UserModel): Promise<UserModel>;
+  update(id: string, userModel: UserModel): Promise<UserModel>;
 }
