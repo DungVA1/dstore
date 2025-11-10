@@ -32,12 +32,16 @@ export class AccountEntity extends BasedEntity {
     this._password = params.password;
     this._status = params.status;
     this._role = params.role;
-    this._verificationTokens = this.verificationTokens;
+    this._verificationTokens = params.verificationTokens;
     this._createdAt = params.createdAt;
     this._updatedAt = params.updatedAt;
   }
 
-  static create(params: { email: string; password: string }) {
+  static create(params: {
+    email: string;
+    password: string;
+    verificationTokens?: VerificationToken[];
+  }) {
     const now = new Date();
     const account = new AccountEntity({
       id: AccountId.generate(),
@@ -45,7 +49,7 @@ export class AccountEntity extends BasedEntity {
       password: params.password,
       status: AccountStatus.PENDING,
       role: 'User',
-      verificationTokens: [],
+      verificationTokens: params.verificationTokens || [],
       createdAt: now,
       updatedAt: now,
     });

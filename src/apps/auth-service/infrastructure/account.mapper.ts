@@ -44,8 +44,8 @@ export class AccountMapper implements IMapper {
       password: accountModel.password,
       status: accountModel.status,
       role: accountModel.role,
-      verificationTokens: accountModel.verificationTokens.map(
-        (verTokenModel) => {
+      verificationTokens:
+        accountModel.verificationTokens?.map((verTokenModel) => {
           const verToken = new VerificationToken(
             verTokenModel.id,
             verTokenModel.token,
@@ -56,8 +56,7 @@ export class AccountMapper implements IMapper {
           );
 
           return verToken;
-        },
-      ),
+        }) || [],
       createdAt: accountModel.createdAt,
       updatedAt: accountModel.updatedAt,
     });

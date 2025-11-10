@@ -22,16 +22,26 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     if (existedAccount) {
       throw new EmailAlreadyUsedError();
     }
+
+    const verificationCode = Math.round(Math.random() * 1000000).toString();
+    const current = new Date();
     const accountEntity = AccountEntity.create({
       email: command.email,
       password: command.password,
+      verificationTokens: [
+        {
+          id: 'abc', // TODO: Generate id
+          attempts: 0,
+          createdAt: current,
+          expiredAt: new Date(current.setMinutes(current.getMinutes() + 5)),
+          token: verificationCode,
+        },
+      ],
     });
-
-    const verifyCode = Math.round(Math.random() * 1000000);
 
     const mapper = new AccountMapper();
     await this.repo.save(mapper.toModel(accountEntity));
 
-    return new SuccessResponse({ email: command.email, verifyCode });
+    return new SuccessResponse({ email: command.email, verificationCode });
   }
 }

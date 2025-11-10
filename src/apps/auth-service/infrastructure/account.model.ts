@@ -59,6 +59,8 @@ export class AccountModel extends BasedModel {
   })
   updatedAt: Date;
 
-  @OneToMany(() => VerificationTokenModel, (token) => token.account)
+  @OneToMany(() => VerificationTokenModel, (token) => token.account, {
+    cascade: ['insert', 'remove'],
+  })
   verificationTokens: VerificationTokenModel[];
 }
