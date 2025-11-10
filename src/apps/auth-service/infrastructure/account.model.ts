@@ -9,7 +9,7 @@ import {
 
 import { AccountStatus } from '../common/account.enum';
 
-@Entity('account')
+@Entity('accounts')
 export class AccountModel extends BasedModel {
   @PrimaryColumn()
   id: string;

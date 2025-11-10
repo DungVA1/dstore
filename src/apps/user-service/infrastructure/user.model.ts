@@ -9,7 +9,7 @@ import {
 
 import { UserStatus } from '../common/user.enum';
 
-@Entity('user')
+@Entity('users')
 export class UserModel extends BasedModel {
   @PrimaryColumn({
     name: 'id',

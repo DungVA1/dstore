@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class InitUserSchema1762761228767 implements MigrationInterface {
   async up(q: QueryRunner): Promise<void> {
     await q.query(`
-      CREATE TABLE IF NOT EXISTS user (
+      CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
         account_id TEXT NOT NULL,
         name TEXT NOT NULL,
@@ -17,6 +17,6 @@ export class InitUserSchema1762761228767 implements MigrationInterface {
     `);
   }
   async down(q: QueryRunner): Promise<void> {
-    await q.query(`DROP TABLE IF EXISTS user;`);
+    await q.query(`DROP TABLE IF EXISTS users;`);
   }
 }
