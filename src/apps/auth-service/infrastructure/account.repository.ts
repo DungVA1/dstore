@@ -32,4 +32,13 @@ export class AccountRepository implements IAccountRepository {
   getList(options: Record<string, any>): Promise<AccountModel[]> {
     return this.accountModel.find(options);
   }
+
+  getAccountByEmailWithTokens(email: string): Promise<AccountModel | null> {
+    return this.accountModel.findOne({
+      where: {
+        email,
+      },
+      relations: ['verificationTokens'],
+    });
+  }
 }

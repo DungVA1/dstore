@@ -3,11 +3,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { AccountStatus } from '../common/account.enum';
+
+import { VerificationTokenModel } from './verification-code.model';
 
 @Entity('accounts')
 export class AccountModel extends BasedModel {
@@ -55,4 +58,7 @@ export class AccountModel extends BasedModel {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @OneToMany(() => VerificationTokenModel, (token) => token.account)
+  verificationTokens: VerificationTokenModel[];
 }

@@ -9,6 +9,7 @@ import { LoginHandler } from './application/command/login/login.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
 import { AccountModel } from './infrastructure/account.model';
 import { AccountRepository } from './infrastructure/account.repository';
+import { VerificationTokenModel } from './infrastructure/verification-code.model';
 import { AuthController } from './presentation/auth.controller';
 
 @Module({
@@ -16,7 +17,7 @@ import { AuthController } from './presentation/auth.controller';
     CqrsModule,
     AppConfigModule,
     DatabaseModule,
-    TypeOrmModule.forFeature([AccountModel]),
+    TypeOrmModule.forFeature([AccountModel, VerificationTokenModel]),
   ],
   controllers: [AuthController],
   providers: [

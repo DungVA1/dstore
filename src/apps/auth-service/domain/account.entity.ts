@@ -2,6 +2,7 @@ import { BasedEntity } from '@common/based.entity';
 
 import { AccountStatus } from '../common/account.enum';
 import { Role } from '../common/account.type';
+import { VerificationToken } from '../common/verification-token.type';
 
 import { AccountId } from './account.object-values';
 
@@ -11,6 +12,7 @@ export class AccountEntity extends BasedEntity {
   private _password: string;
   private _status: AccountStatus;
   private _role: Role;
+  private _verificationTokens: VerificationToken[];
   private _createdAt: Date;
   private _updatedAt: Date;
 
@@ -20,6 +22,7 @@ export class AccountEntity extends BasedEntity {
     password: string;
     status: AccountStatus;
     role: Role;
+    verificationTokens: VerificationToken[];
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -29,6 +32,7 @@ export class AccountEntity extends BasedEntity {
     this._password = params.password;
     this._status = params.status;
     this._role = params.role;
+    this._verificationTokens = this.verificationTokens;
     this._createdAt = params.createdAt;
     this._updatedAt = params.updatedAt;
   }
@@ -41,6 +45,7 @@ export class AccountEntity extends BasedEntity {
       password: params.password,
       status: AccountStatus.PENDING,
       role: 'User',
+      verificationTokens: [],
       createdAt: now,
       updatedAt: now,
     });
@@ -96,6 +101,7 @@ export class AccountEntity extends BasedEntity {
     password: string;
     status: string;
     role: string;
+    verificationTokens: VerificationToken[];
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -105,6 +111,7 @@ export class AccountEntity extends BasedEntity {
       password: params.password,
       status: params.status as AccountStatus,
       role: params.role as Role,
+      verificationTokens: params.verificationTokens,
       createdAt: params.createdAt,
       updatedAt: params.updatedAt,
     });
@@ -128,6 +135,10 @@ export class AccountEntity extends BasedEntity {
 
   get role() {
     return this._role;
+  }
+
+  get verificationTokens() {
+    return this._verificationTokens;
   }
 
   get createdAt() {
