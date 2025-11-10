@@ -29,11 +29,12 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
       throw new AccountIsNotActivedError();
     }
 
-    // check password
+    // TODO: Compare plain password vs hash password
     if (account.password !== command.password) {
       throw new EmailOrPasswordIsWrongError();
     }
 
+    // TODO: Generate JWT token
     return new SuccessResponse({
       accessToken: 'fake-access-token',
       refreshToke: 'fake-refresh-token',
