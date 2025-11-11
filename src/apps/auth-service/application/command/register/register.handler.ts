@@ -19,7 +19,6 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     private readonly repo: IAccountRepository,
   ) {}
 
-  // TODO: Implement hash password and send verification email
   async execute(command: RegisterCommand): Promise<any> {
     const existedAccount = await this.repo.getByEmail(command.email);
     if (existedAccount) {
