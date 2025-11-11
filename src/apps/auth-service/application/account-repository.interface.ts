@@ -8,5 +8,6 @@ export interface IAccountRepository {
   getList(options: Record<string, any>): Promise<AccountModel[]>;
   getAccountByEmailWithTokens(email: string): Promise<AccountModel | null>;
   invalidAllTokens(accountId: string);
-  createVerificationToken(accountId: string, token: string);
+  createVerificationToken(id: string, accountId: string, token: string);
+  useToken(tokenId: string);
 }

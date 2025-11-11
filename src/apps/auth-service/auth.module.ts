@@ -10,6 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginHandler } from './application/command/login/login.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
 import { ResendCodeHandler } from './application/command/resend-code/resend-code.handler';
+import { VerifyTokenHandler } from './application/command/verify/verify.handler';
 import { AccountModel } from './infrastructure/account.model';
 import { AccountRepository } from './infrastructure/account.repository';
 import { VerificationTokenModel } from './infrastructure/verification-code.model';
@@ -34,6 +35,7 @@ import { AuthController } from './presentation/auth.controller';
     LoginHandler,
     RegisterHandler,
     ResendCodeHandler,
+    VerifyTokenHandler,
   ],
 })
 export class AuthModule {}

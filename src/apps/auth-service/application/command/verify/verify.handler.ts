@@ -1,5 +1,7 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
+import { SuccessResponse } from '@common/based.response';
+import { Encrypt } from '@libs/encrypt/hash-string';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -8,25 +10,26 @@ import {
   AccountIsLockedError,
   AccountIsNotRegistered,
   EmailNotExistedError,
+  VerificationTokenIsWroingOrExpired,
 } from '../../account-application.error';
 import { IAccountRepository } from '../../account-repository.interface';
 
-import { VerifyCodeCommand } from './verify.command';
+import { VerifyTokenCommand } from './verify.command';
 
-@CommandHandler(VerifyCodeCommand)
-export class VerifyCodeHandler implements ICommandHandler<VerifyCodeCommand> {
+@CommandHandler(VerifyTokenCommand)
+export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
   constructor(
     @Inject('IAccountRepository')
     private readonly repo: IAccountRepository,
   ) {}
 
-  async execute(command: VerifyCodeCommand) {
-    const { email } = command;
-    const accountModel = await this.repo.getByEmail(email);
-    const accountMapper = new AccountMapper();
+  async execute(command: VerifyTokenCommand) {
+    const { email, token } = command;
+    const accountModel = await this.repo.getAccountByEmailWithTokens(email);
     if (!accountModel) {
       throw new EmailNotExistedError();
     }
+    const accountMapper = new AccountMapper();
     const account = accountMapper.toEntity(accountModel);
     switch (account.status) {
       case AccountStatus.ACTIVE:
@@ -36,5 +39,18 @@ export class VerifyCodeHandler implements ICommandHandler<VerifyCodeCommand> {
       case AccountStatus.DELETED:
         throw new AccountIsNotRegistered();
     }
+
+    const verificationToken = account.verificationTokens[0];
+    if (!verificationToken) {
+      throw new VerificationTokenIsWroingOrExpired();
+    }
+    const isValid = await Encrypt.compare(token, verificationToken?.token);
+
+    if (!isValid) {
+      throw new VerificationTokenIsWroingOrExpired();
+    }
+    await this.repo.useToken(verificationToken.id);
+
+    return new SuccessResponse(account);
   }
 }

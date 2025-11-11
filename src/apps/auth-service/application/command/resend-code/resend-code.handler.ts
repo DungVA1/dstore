@@ -38,6 +38,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
     await this.repo.invalidAllTokens(account.id.toString());
     const verificationCode = this.generatorService.generateOTP();
     this.repo.createVerificationToken(
+      this.generatorService.generateId(),
       account.id.toString(),
       await Encrypt.hashString(verificationCode),
     );

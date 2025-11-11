@@ -1,4 +1,3 @@
-import { Generator } from '@libs/generator/generator';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -38,12 +37,18 @@ export class AccountRepository implements IAccountRepository {
   }
 
   getAccountByEmailWithTokens(email: string): Promise<AccountModel | null> {
-    return this.accountModel.findOne({
-      where: {
-        email,
-      },
-      relations: ['verificationTokens'],
-    });
+    return this.accountModel
+      .createQueryBuilder('account')
+      .leftJoinAndSelect(
+        'account.verificationTokens',
+        'token',
+        'token.expired_at > :now AND token.used_at IS NULL',
+        {
+          now: new Date(),
+        },
+      )
+      .where('account.email = :email', { email })
+      .getOne();
   }
 
   invalidAllTokens(accountId: string) {
@@ -53,11 +58,10 @@ export class AccountRepository implements IAccountRepository {
     );
   }
 
-  async createVerificationToken(accountId: string, token: string) {
+  async createVerificationToken(id: string, accountId: string, token: string) {
     const current = new Date();
-    const id = Generator.generateId();
     await this.verificationTokenModel.save({
-      id: Generator.generateId(),
+      id,
       accountId: accountId,
       attempts: 0,
       expiredAt: new Date(current.setTime(current.getTime() + 5 * 60 * 1000)),
@@ -65,5 +69,12 @@ export class AccountRepository implements IAccountRepository {
     });
 
     return id;
+  }
+
+  async useToken(tokenId: string) {
+    const current = new Date();
+    await this.verificationTokenModel.update(tokenId, {
+      usedAt: current,
+    });
   }
 }

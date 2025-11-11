@@ -4,10 +4,12 @@ import { CommandBus } from '@nestjs/cqrs';
 import { LoginCommand } from '../application/command/login/login.command';
 import { RegisterCommand } from '../application/command/register/register.command';
 import { ResendCodeCommand } from '../application/command/resend-code/resend-code.command';
+import { VerifyTokenCommand } from '../application/command/verify/verify.command';
 
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { ResendOtpDTO } from './dto/resend-otp.dto';
+import { VerifyTokenDTO } from './dto/verify-otp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +32,12 @@ export class AuthController {
   @Post('resend-otp')
   resendVerificationCode(@Body() body: ResendOtpDTO) {
     return this.commandBus.execute(new ResendCodeCommand(body.email));
+  }
+
+  @Post('verify-otp')
+  verifyOtp(@Body() body: VerifyTokenDTO) {
+    return this.commandBus.execute(
+      new VerifyTokenCommand(body.email, body.token),
+    );
   }
 }

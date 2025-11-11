@@ -54,3 +54,10 @@ export class AccountIsNotRegistered extends AccountApplicationError {
     super('ACCOUNT_IS_NOT_REGISTED', 'account is not registered');
   }
 }
+
+export class VerificationTokenIsWroingOrExpired extends AccountApplicationError {
+  httpStatus = 400;
+  constructor() {
+    super('VERIFICATION_IS_WRONG_OR_EXPIRED', 'token is not wrong or expired');
+  }
+}

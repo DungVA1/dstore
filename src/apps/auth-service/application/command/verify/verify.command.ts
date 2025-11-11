@@ -1,6 +1,6 @@
-export class VerifyCodeCommand {
+export class VerifyTokenCommand {
   constructor(
     public readonly email: string,
-    public readonly verifyCode: number,
+    public readonly token: string,
   ) {}
 }
