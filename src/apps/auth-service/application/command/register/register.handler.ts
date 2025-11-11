@@ -1,6 +1,7 @@
 import { AccountEntity } from '@apps/auth-service/domain/account.entity';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
+import { Encrypt } from '@libs/encrypt/hash-string';
 import { Generator } from '@libs/generator/generator';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
@@ -29,14 +30,14 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     const current = new Date();
     const accountEntity = AccountEntity.create({
       email: command.email,
-      password: command.password,
+      password: await Encrypt.hashString(command.password),
       verificationTokens: [
         {
           id: Generator.generateId(),
           attempts: 0,
           createdAt: current,
           expiredAt: new Date(current.setMinutes(current.getMinutes() + 5)),
-          token: verificationCode,
+          token: await Encrypt.hashString(verificationCode),
         },
       ],
     });

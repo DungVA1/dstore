@@ -1,5 +1,6 @@
 import { err, ok, Result } from '@common/based.error';
 import { BasedObjectValue } from '@common/based.object-values';
+import { Generator } from '@libs/generator/generator';
 
 import { InvalidEmailError, InvalidIdError } from './account.domain-error';
 export class EmailAddress extends BasedObjectValue {
@@ -34,7 +35,7 @@ export class AccountId extends BasedObjectValue {
   }
 
   static generate() {
-    return new AccountId(Math.random().toString());
+    return new AccountId(Generator.generateId());
   }
 
   static create(value: string): Result<AccountId, InvalidIdError> {
