@@ -1,5 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 export class Generator {
   static generateId(): string {
-    return Math.random().toString();
+    return uuidv4();
   }
 }
