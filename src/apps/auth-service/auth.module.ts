@@ -1,6 +1,7 @@
 import { AppConfigModule } from '@libs/config/config.module';
 import { DatabaseModule } from '@libs/database/database.module';
 import { LoggerService } from '@libs/log/logger.service';
+import { Notification } from '@libs/notification/notification.service';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';

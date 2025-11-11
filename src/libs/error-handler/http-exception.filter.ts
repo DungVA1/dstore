@@ -4,6 +4,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
+  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -33,6 +34,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
         },
       });
     }
+
+    const logger = new Logger();
+    logger.error(exception);
 
     response.status(500).json({
       ok: false,

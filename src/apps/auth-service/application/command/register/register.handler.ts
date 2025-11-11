@@ -3,6 +3,7 @@ import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper'
 import { SuccessResponse } from '@common/based.response';
 import { Encrypt } from '@libs/encrypt/hash-string';
 import { Generator } from '@libs/generator/generator';
+import { Notification } from '@libs/notification/notification.service';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -25,7 +26,6 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
       throw new EmailAlreadyUsedError();
     }
 
-    // TODO: send verification email with code to user
     const verificationCode = Math.round(Math.random() * 1000000).toString();
     const current = new Date();
     const accountEntity = AccountEntity.create({
@@ -44,7 +44,11 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
 
     const mapper = new AccountMapper();
     await this.repo.save(mapper.toModel(accountEntity));
-
+    const notifService = new Notification('Email');
+    notifService.send({
+      sendTo: [accountEntity.email],
+      content: verificationCode,
+    });
     return new SuccessResponse({ email: command.email, verificationCode });
   }
 }
