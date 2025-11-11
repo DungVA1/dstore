@@ -1,16 +1,21 @@
-/* eslint-disable no-console */
+import { LoggerService } from '@libs/shared/logger/logger.service';
+import { Injectable } from '@nestjs/common';
+
 type NotificationType = 'Email' | 'SMS' | 'Push';
-// TODO: Should build an service for notification
 
-export class Notification {
-  constructor(private readonly type: NotificationType) {}
+@Injectable()
+export class NotificationService {
+  constructor(private readonly logger: LoggerService) {}
 
-  send(params: {
-    sendTo: unknown[];
-    content: unknown;
-    option?: Record<string, unknown>;
-  }) {
-    switch (this.type) {
+  send(
+    type: NotificationType,
+    params: {
+      sendTo: unknown[];
+      content: unknown;
+      option?: Record<string, unknown>;
+    },
+  ) {
+    switch (type) {
       case 'Email': {
         this.sendEmail(
           params.sendTo as string[],
@@ -44,13 +49,13 @@ export class Notification {
     emailContent: string,
     ccRecipients?: string[],
   ) {
-    console.log(
+    this.logger.log(
       `Send email to ${recipients.join(', ')} successfully: ${emailContent} \ncc: ${ccRecipients?.join(', ')}`,
     );
   }
 
   private sendSMS(phoneNumbers: string[], smsContent: string) {
-    console.log(
+    this.logger.log(
       `Send sms to ${phoneNumbers.join(', ')} successfully: ${smsContent}`,
     );
   }
@@ -59,7 +64,7 @@ export class Notification {
     recipientCodes: string[],
     notifContent: Record<string, unknown>,
   ) {
-    console.log(
+    this.logger.log(
       `Push notification to ${recipientCodes.join(', ')} successfully: ${JSON.stringify(notifContent)}`,
     );
   }

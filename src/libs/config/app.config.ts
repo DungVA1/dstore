@@ -20,4 +20,8 @@ export default () => ({
     password: process.env.POSTGRESQL_PASSWORD,
     database: process.env.POSTGRESQL_DATABASE,
   },
+  secret: {
+    jwt: process.env.JWT_SECRET,
+    otp: process.env.OTP_SECRET,
+  },
 });

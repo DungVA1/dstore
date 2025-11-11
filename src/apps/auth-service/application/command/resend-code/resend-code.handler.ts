@@ -1,0 +1,52 @@
+import { AccountStatus } from '@apps/auth-service/common/account.enum';
+import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
+import { SuccessResponse } from '@common/based.response';
+import { Encrypt } from '@libs/encrypt/hash-string';
+import { GeneratorService } from '@libs/shared/generator/generator.service';
+import { NotificationService } from '@libs/shared/notification/notification.service';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import {
+  AccountAlreadyActivedError,
+  EmailNotExistedError,
+} from '../../account-application.error';
+import { IAccountRepository } from '../../account-repository.interface';
+
+import { ResendCodeCommand } from './resend-code.command';
+
+@CommandHandler(ResendCodeCommand)
+export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
+  constructor(
+    @Inject('IAccountRepository')
+    private readonly repo: IAccountRepository,
+    private readonly generatorService: GeneratorService,
+    private readonly notificationService: NotificationService,
+  ) {}
+
+  async execute(command: ResendCodeCommand): Promise<any> {
+    const accountModel = await this.repo.getByEmail(command.email);
+    if (!accountModel) {
+      throw new EmailNotExistedError();
+    }
+    const mapper = new AccountMapper();
+    const account = mapper.toEntity(accountModel);
+    if (account.status !== AccountStatus.PENDING) {
+      throw new AccountAlreadyActivedError();
+    }
+
+    await this.repo.invalidAllTokens(account.id.toString());
+    const verificationCode = this.generatorService.generateOTP();
+    this.repo.createVerificationToken(
+      account.id.toString(),
+      await Encrypt.hashString(verificationCode),
+    );
+
+    this.notificationService.send('Email', {
+      sendTo: [command.email],
+      content: verificationCode,
+    });
+
+    return new SuccessResponse();
+  }
+}

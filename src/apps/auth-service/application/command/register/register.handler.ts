@@ -2,8 +2,8 @@ import { AccountEntity } from '@apps/auth-service/domain/account.entity';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
 import { Encrypt } from '@libs/encrypt/hash-string';
-import { Generator } from '@libs/generator/generator';
-import { Notification } from '@libs/notification/notification.service';
+import { GeneratorService } from '@libs/shared/generator/generator.service';
+import { NotificationService } from '@libs/shared/notification/notification.service';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -17,6 +17,8 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
   constructor(
     @Inject('IAccountRepository')
     private readonly repo: IAccountRepository,
+    private readonly generatorService: GeneratorService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async execute(command: RegisterCommand): Promise<any> {
@@ -25,17 +27,19 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
       throw new EmailAlreadyUsedError();
     }
 
-    const verificationCode = Math.round(Math.random() * 1000000).toString();
+    const verificationCode = this.generatorService.generateOTP();
     const current = new Date();
     const accountEntity = AccountEntity.create({
       email: command.email,
       password: await Encrypt.hashString(command.password),
       verificationTokens: [
         {
-          id: Generator.generateId(),
+          id: this.generatorService.generateId(),
           attempts: 0,
           createdAt: current,
-          expiredAt: new Date(current.setMinutes(current.getMinutes() + 5)),
+          expiredAt: new Date(
+            current.setTime(current.getTime() + 5 * 60 * 1000),
+          ),
           token: await Encrypt.hashString(verificationCode),
         },
       ],
@@ -43,8 +47,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
 
     const mapper = new AccountMapper();
     await this.repo.save(mapper.toModel(accountEntity));
-    const notifService = new Notification('Email');
-    notifService.send({
+    this.notificationService.send('Email', {
       sendTo: [accountEntity.email],
       content: verificationCode,
     });

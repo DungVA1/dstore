@@ -6,5 +6,6 @@ export class VerificationToken {
     public attempts: number,
     public readonly createdAt: Date,
     public usedAt?: Date,
+    public readonly accountId?: string,
   ) {}
 }
