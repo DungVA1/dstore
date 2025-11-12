@@ -1,12 +1,10 @@
 import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { LoggerService } from '@shared/logger/logger.service';
 
 import { AuthModule } from './auth.module';
-
-const logger = new Logger('Auth');
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AuthModule);
@@ -26,8 +24,9 @@ const bootstrap = async () => {
 
   const port: number = configService.get('app.auth.port') as number;
   const appName: string = configService.get('app.auth.name') as string;
+  loggerService.setContext(appName);
   await app.listen(port, () => {
-    logger.log(`${appName} is running on port ${port}`);
+    loggerService.log(`${appName} is running on port ${port}`);
   });
 };
 

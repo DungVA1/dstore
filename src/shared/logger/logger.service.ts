@@ -2,8 +2,13 @@ import { ConsoleLogger, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LoggerService extends ConsoleLogger {
-  log(message: unknown, context?: unknown): void {
-    // do customization for log here
-    super.log(message, context);
+  context: string = 'DStore-Application';
+
+  setContext(context: string): void {
+    this.context = context;
+  }
+
+  log(message: unknown): void {
+    super.log(message);
   }
 }
