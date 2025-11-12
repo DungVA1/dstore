@@ -9,26 +9,24 @@ import { ITokenPayload, TokenPair } from './token.interface';
 @Injectable()
 export class TokenService {
   constructor(
-    private readonly jwtService: JwtService,
+    private readonly jwt: JwtService,
     private readonly loggerService: LoggerService,
     private readonly configService: ConfigService,
   ) {}
   async generateToken(payload: ITokenPayload): Promise<TokenPair> {
     const jwtId = crypto.randomBytes(16).toString('hex');
-    const accessToken = await this.jwtService.signAsync(payload, {
+    const accessToken = await this.jwt.signAsync(payload, {
       secret: this.configService.get('secret.jwt'),
-      algorithm: 'HS256',
       expiresIn: 15 * 60,
       jwtid: jwtId,
     });
-    const refreshToken = await this.jwtService.signAsync(
+    const refreshToken = await this.jwt.signAsync(
       {
         type: 'refresh',
         jwtid: jwtId,
       },
       {
         secret: this.configService.get('secret.jwt'),
-        algorithm: 'HS256',
         expiresIn: 30 * 24 * 60 * 60,
         jwtid: jwtId,
       },
@@ -41,10 +39,9 @@ export class TokenService {
   }
 
   async renewAccessToken(refreshToken: string): Promise<string> {
-    const payload: Record<string, unknown> =
-      this.jwtService.decode(refreshToken);
+    const payload: Record<string, unknown> = this.jwt.decode(refreshToken);
 
-    const jwtToken = await this.jwtService.signAsync(payload, {
+    const jwtToken = await this.jwt.signAsync(payload, {
       secret: this.configService.get('secret.jwt'),
       expiresIn: 15 * 60,
     });
@@ -54,7 +51,7 @@ export class TokenService {
 
   async validateToken(token: string): Promise<ITokenPayload> {
     try {
-      const payload: ITokenPayload = await this.jwtService.verifyAsync(token, {
+      const payload: ITokenPayload = await this.jwt.verifyAsync(token, {
         secret: process.env.JWT,
       });
 

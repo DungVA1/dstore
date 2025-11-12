@@ -12,7 +12,7 @@ import { TokenService } from './token.service';
       useFactory: () => {
         return {
           signOptions: {
-            algorithm: 'RS256' as const,
+            algorithm: 'HS256' as const,
           },
         };
       },
