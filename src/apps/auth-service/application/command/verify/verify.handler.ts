@@ -1,7 +1,7 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
-import { Encrypt } from '@libs/encrypt/hash-string.lib';
+import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -44,7 +44,10 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     if (!verificationToken) {
       throw new VerificationTokenIsWroingOrExpired();
     }
-    const isValid = await Encrypt.compare(token, verificationToken?.token);
+    const isValid = await EncryptionLib.compare(
+      token,
+      verificationToken?.token,
+    );
 
     if (!isValid) {
       throw new VerificationTokenIsWroingOrExpired();

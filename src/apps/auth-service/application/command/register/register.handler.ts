@@ -1,7 +1,7 @@
 import { AccountEntity } from '@apps/auth-service/domain/account.entity';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
-import { Encrypt } from '@libs/encrypt/hash-string.lib';
+import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GeneratorService } from '@shared/generator/generator.service';
@@ -32,7 +32,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     const accountEntity = AccountEntity.create({
       id: this.generatorService.generateId(),
       email: command.email,
-      password: await Encrypt.hashString(command.password),
+      password: await EncryptionLib.hashString(command.password),
       verificationTokens: [
         {
           id: this.generatorService.generateId(),
@@ -41,7 +41,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
           expiredAt: new Date(
             current.setTime(current.getTime() + 5 * 60 * 1000),
           ),
-          token: await Encrypt.hashString(verificationCode),
+          token: await EncryptionLib.hashString(verificationCode),
         },
       ],
     });
