@@ -21,7 +21,8 @@
     "paths": {
       "@apps/*": ["src/apps/*"],
       "@common/*": ["src/common/*"],
-      "@libs/*": ["src/libs/*"]
+      "@libs/*": ["src/libs/*"],
+      "@shared/*": ["src/shared/*"],
     }
   },
   "include": ["src/**/*", "src/apps/user-service/application/command/create-user/.ts"]

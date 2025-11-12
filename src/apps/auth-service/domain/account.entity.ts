@@ -38,13 +38,14 @@ export class AccountEntity extends BasedEntity {
   }
 
   static create(params: {
+    id: string;
     email: string;
     password: string;
     verificationTokens?: VerificationToken[];
   }) {
     const now = new Date();
     const account = new AccountEntity({
-      id: AccountId.generate(),
+      id: AccountId.create(params.id),
       email: params.email,
       password: params.password,
       status: AccountStatus.PENDING,
@@ -110,7 +111,7 @@ export class AccountEntity extends BasedEntity {
     updatedAt: Date;
   }) {
     return new AccountEntity({
-      id: AccountId.parse(params.id),
+      id: AccountId.create(params.id),
       email: params.email,
       password: params.password,
       status: params.status as AccountStatus,

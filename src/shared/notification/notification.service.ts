@@ -1,5 +1,5 @@
-import { LoggerService } from '@libs/shared/logger/logger.service';
 import { Injectable } from '@nestjs/common';
+import { LoggerService } from '@shared/logger/logger.service';
 
 type NotificationType = 'Email' | 'SMS' | 'Push';
 

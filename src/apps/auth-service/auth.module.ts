@@ -1,11 +1,11 @@
-import { AppConfigModule } from '@libs/shared/config/config.module';
-import { DatabaseModule } from '@libs/shared/database/database.module';
-import { GeneratorModule } from '@libs/shared/generator/generator.module';
-import { LoggerService } from '@libs/shared/logger/logger.service';
-import { NotificationModule } from '@libs/shared/notification/notification.module';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppConfigModule } from '@shared/config/config.module';
+import { DatabaseModule } from '@shared/database/database.module';
+import { GeneratorModule } from '@shared/generator/generator.module';
+import { LoggerService } from '@shared/logger/logger.service';
+import { NotificationModule } from '@shared/notification/notification.module';
 
 import { LoginHandler } from './application/command/login/login.handler';
 import { RegisterHandler } from './application/command/register/register.handler';

@@ -1,5 +1,5 @@
-import { NotificationService } from '@libs/shared/notification/notification.service';
 import { Module } from '@nestjs/common';
+import { NotificationService } from '@shared/notification/notification.service';
 
 import { LoggerService } from '../logger/logger.service';
 

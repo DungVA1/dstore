@@ -2,10 +2,10 @@ import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
 import { Encrypt } from '@libs/encrypt/hash-string.lib';
-import { GeneratorService } from '@libs/shared/generator/generator.service';
-import { NotificationService } from '@libs/shared/notification/notification.service';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { GeneratorService } from '@shared/generator/generator.service';
+import { NotificationService } from '@shared/notification/notification.service';
 
 import {
   AccountAlreadyActivedError,

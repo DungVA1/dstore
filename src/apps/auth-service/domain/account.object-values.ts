@@ -1,8 +1,7 @@
 import { err, ok, Result } from '@common/based.error';
 import { BasedObjectValue } from '@common/based.object-values';
-import { Generator } from '@libs/generator/generator';
 
-import { InvalidEmailError, InvalidIdError } from './account.domain-error';
+import { InvalidEmailError } from './account.domain-error';
 export class EmailAddress extends BasedObjectValue {
   private readonly emailPattern = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   private constructor(value: string) {
@@ -30,21 +29,8 @@ export class AccountId extends BasedObjectValue {
     super(value);
   }
 
-  protected get isValid() {
-    return this.value.length > 0 && this.value.length <= 20;
-  }
-
-  static generate() {
-    return new AccountId(Generator.generateId());
-  }
-
-  static create(value: string): Result<AccountId, InvalidIdError> {
+  static create(value: string): AccountId {
     const id = new AccountId(value.trim().toLowerCase());
-
-    return id.isValid ? ok(id) : err(new InvalidEmailError(id.toString()));
-  }
-
-  static parse(value: string) {
-    return new AccountId(value);
+    return id;
   }
 }

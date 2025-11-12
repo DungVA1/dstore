@@ -1,8 +1,8 @@
 import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
-import { LoggerService } from '@libs/shared/logger/logger.service';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { LoggerService } from '@shared/logger/logger.service';
 
 import { AuthModule } from './auth.module';
 
