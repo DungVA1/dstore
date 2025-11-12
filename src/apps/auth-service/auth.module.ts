@@ -1,5 +1,5 @@
-import { AppConfigModule } from '@libs/config/config.module';
-import { DatabaseModule } from '@libs/database/database.module';
+import { AppConfigModule } from '@libs/shared/config/config.module';
+import { DatabaseModule } from '@libs/shared/database/database.module';
 import { GeneratorModule } from '@libs/shared/generator/generator.module';
 import { LoggerService } from '@libs/shared/logger/logger.service';
 import { NotificationModule } from '@libs/shared/notification/notification.module';

@@ -1,5 +1,5 @@
-import { AppConfigModule } from '@libs/config/config.module';
-import { DatabaseModule } from '@libs/database/database.module';
+import { AppConfigModule } from '@libs/shared/config/config.module';
+import { DatabaseModule } from '@libs/shared/database/database.module';
 import { LoggerService } from '@libs/shared/logger/logger.service';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
