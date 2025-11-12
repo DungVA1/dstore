@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { LoggerService } from '@shared/logger/logger.service';
 import * as crypto from 'crypto';
@@ -10,11 +11,13 @@ export class TokenService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly loggerService: LoggerService,
+    private readonly configService: ConfigService,
   ) {}
   async generateToken(payload: ITokenPayload): Promise<TokenPair> {
     const jwtId = crypto.randomBytes(16).toString('hex');
     const accessToken = await this.jwtService.signAsync(payload, {
-      algorithm: 'RS256',
+      secret: this.configService.get('secret.jwt'),
+      algorithm: 'HS256',
       expiresIn: 15 * 60,
       jwtid: jwtId,
     });
@@ -24,7 +27,8 @@ export class TokenService {
         jwtid: jwtId,
       },
       {
-        algorithm: 'RS256',
+        secret: this.configService.get('secret.jwt'),
+        algorithm: 'HS256',
         expiresIn: 30 * 24 * 60 * 60,
         jwtid: jwtId,
       },
@@ -41,7 +45,7 @@ export class TokenService {
       this.jwtService.decode(refreshToken);
 
     const jwtToken = await this.jwtService.signAsync(payload, {
-      secret: process.env.JWT,
+      secret: this.configService.get('secret.jwt'),
       expiresIn: 15 * 60,
     });
 

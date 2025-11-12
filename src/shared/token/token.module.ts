@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { LoggerService } from '@shared/logger/logger.service';
 
 import { TokenService } from './token.service';
 
@@ -17,7 +18,7 @@ import { TokenService } from './token.service';
       },
     }),
   ],
-  providers: [TokenService],
+  providers: [TokenService, LoggerService],
   exports: [TokenService],
 })
 export class TokenModule {}
