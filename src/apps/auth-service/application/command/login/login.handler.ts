@@ -4,6 +4,7 @@ import { SuccessResponse } from '@common/based.response';
 import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { LoggerService } from '@shared/logger/logger.service';
 import { TokenService } from '@shared/token/token.service';
 
 import {
@@ -20,7 +21,10 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
     @Inject('IAccountRepository') private readonly repo: IAccountRepository,
     private readonly tokenService: TokenService,
-  ) {}
+    private readonly loggerService: LoggerService,
+  ) {
+    this.loggerService.setContext(LoginHandler.name);
+  }
   async execute(command: LoginCommand): Promise<any> {
     const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {

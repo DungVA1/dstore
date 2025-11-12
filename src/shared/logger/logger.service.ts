@@ -4,6 +4,11 @@ import { ConsoleLogger, Injectable } from '@nestjs/common';
 export class LoggerService extends ConsoleLogger {
   context: string = 'DStore-Application';
 
+  constructor(context: string) {
+    super();
+    this.context = context;
+  }
+
   setContext(context: string): void {
     this.context = context;
   }

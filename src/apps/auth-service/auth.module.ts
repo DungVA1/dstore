@@ -29,7 +29,10 @@ import { AuthController } from './presentation/auth.controller';
   ],
   controllers: [AuthController],
   providers: [
-    LoggerService,
+    {
+      provide: LoggerService,
+      useValue: new LoggerService('AuthModule'),
+    },
     {
       provide: 'IAccountRepository',
       useClass: AccountRepository,
