@@ -52,7 +52,7 @@ export class TokenService {
   async validateToken(token: string): Promise<ITokenPayload> {
     try {
       const payload: ITokenPayload = await this.jwt.verifyAsync(token, {
-        secret: process.env.JWT,
+        secret: this.configService.get('secret.jwt'),
       });
 
       return payload;

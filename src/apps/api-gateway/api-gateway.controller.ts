@@ -1,4 +1,11 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class ApiGatewayController {}
+export class ApiGatewayController {
+  @Get('users')
+  getUser() {
+    return {
+      status: 200,
+    };
+  }
+}

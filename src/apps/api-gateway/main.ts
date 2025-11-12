@@ -13,6 +13,7 @@ async function bootstrap() {
   const port: number = configService.get('app.gateway.port') as number;
   const appName: string = configService.get('app.gateway.name') as string;
   loggerService.setContext(appName);
+  await app.startAllMicroservices();
   await app.listen(port, () => {
     loggerService.log(`${appName} is running on port ${port}`);
   });
