@@ -6,6 +6,7 @@ import { DatabaseModule } from '@shared/database/database.module';
 import { GeneratorModule } from '@shared/generator/generator.module';
 import { LoggerService } from '@shared/logger/logger.service';
 import { NotificationModule } from '@shared/notification/notification.module';
+import { TokenModule } from '@shared/token/token.module';
 
 import { LoginHandler } from './application/command/login/login.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
@@ -24,6 +25,7 @@ import { AuthController } from './presentation/auth.controller';
     TypeOrmModule.forFeature([AccountModel, VerificationTokenModel]),
     GeneratorModule,
     NotificationModule,
+    TokenModule,
   ],
   controllers: [AuthController],
   providers: [

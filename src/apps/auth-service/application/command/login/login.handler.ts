@@ -1,8 +1,10 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
 import { SuccessResponse } from '@common/based.response';
+import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { TokenService } from '@shared/token/token.service';
 
 import {
   AccountIsNotActivedError,
@@ -17,6 +19,7 @@ import { LoginCommand } from './login.command';
 export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
     @Inject('IAccountRepository') private readonly repo: IAccountRepository,
+    private readonly tokenService: TokenService,
   ) {}
   async execute(command: LoginCommand): Promise<any> {
     const accountModel = await this.repo.getByEmail(command.email);
@@ -29,15 +32,23 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
       throw new AccountIsNotActivedError();
     }
 
-    // TODO: Compare plain password vs hash password
-    if (account.password !== command.password) {
+    const isValid = await EncryptionLib.compare(
+      command.password,
+      account.password,
+    );
+
+    if (!isValid) {
       throw new EmailOrPasswordIsWrongError();
     }
 
-    // TODO: Generate JWT token
+    const { accessToken, refreshToken } = await this.tokenService.generateToken(
+      {
+        accountId: account.id.toString(),
+      },
+    );
     return new SuccessResponse({
-      accessToken: 'fake-access-token',
-      refreshToke: 'fake-refresh-token',
+      accessToken,
+      refreshToken,
     });
   }
 }
