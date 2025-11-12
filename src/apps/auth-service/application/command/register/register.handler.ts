@@ -30,6 +30,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     const verificationCode = this.generatorService.generateOTP();
     const current = new Date();
     const accountEntity = AccountEntity.create({
+      id: this.generatorService.generateId(),
       email: command.email,
       password: await Encrypt.hashString(command.password),
       verificationTokens: [

@@ -1,7 +1,7 @@
-import { LoggerService } from '@libs/shared/logger/logger.service';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { LoggerService } from '@shared/logger/logger.service';
 
 import { UserAppModule } from './user.module';
 const logger = new Logger('User');

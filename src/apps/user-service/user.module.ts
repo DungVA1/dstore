@@ -1,9 +1,9 @@
-import { AppConfigModule } from '@libs/shared/config/config.module';
-import { DatabaseModule } from '@libs/shared/database/database.module';
-import { LoggerService } from '@libs/shared/logger/logger.service';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppConfigModule } from '@shared/config/config.module';
+import { DatabaseModule } from '@shared/database/database.module';
+import { LoggerService } from '@shared/logger/logger.service';
 
 import { CreateUserHandler } from './application/command/create-user/create-user.handler';
 import { DeleteUserHandler } from './application/command/delete-user/delete-user.handler';
