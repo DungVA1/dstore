@@ -1,0 +1,14 @@
+import { ApplicationError } from '@common/based.error';
+
+class GatewayError extends ApplicationError {
+  constructor(code: string, message: string) {
+    super(code, message);
+  }
+}
+
+export class UnauthenicationError extends GatewayError {
+  httpStatus = 401;
+  constructor() {
+    super('UNAUTHENTICATION', 'token is valid or expired');
+  }
+}

@@ -50,15 +50,10 @@ export class TokenService {
   }
 
   async validateToken(token: string): Promise<ITokenPayload> {
-    try {
-      const payload: ITokenPayload = await this.jwt.verifyAsync(token, {
-        secret: this.configService.get('secret.jwt'),
-      });
+    const payload: ITokenPayload = await this.jwt.verifyAsync(token, {
+      secret: this.configService.get('secret.jwt'),
+    });
 
-      return payload;
-    } catch (e) {
-      this.loggerService.error(e);
-      throw new Error('Unauthentication');
-    }
+    return payload;
   }
 }

@@ -1,3 +1,4 @@
+import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { LoggerService } from '@shared/logger/logger.service';
@@ -10,6 +11,7 @@ async function bootstrap() {
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
+  app.useGlobalFilters(new AllExceptionsFilter());
   const port: number = configService.get('app.gateway.port') as number;
   const appName: string = configService.get('app.gateway.name') as string;
   loggerService.setContext(appName);
