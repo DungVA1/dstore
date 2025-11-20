@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { LoggerService } from '@shared/logger/logger.service';
 
-import { ApiGatewayModule } from './api-gateway.module';
+import { GatewayModule } from './gateway.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiGatewayModule);
+  const app = await NestFactory.create(GatewayModule);
   const configService = app.get(ConfigService);
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);

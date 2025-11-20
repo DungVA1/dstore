@@ -7,8 +7,8 @@ import { LoggerService } from '@shared/logger/logger.service';
 import { TokenModule } from '@shared/token/token.module';
 
 import { AuthGuard } from './guards/authentication.guard';
-import { ApiGatewayController } from './api-gateway.controller';
-import { ApiGatewayService } from './api-gateway.service';
+import { AuthController, UserController } from './gateway.controller';
+import { GatewayService } from './gateway.service';
 
 @Module({
   imports: [
@@ -42,13 +42,13 @@ import { ApiGatewayService } from './api-gateway.service';
     ]),
   ],
   providers: [
-    ApiGatewayService,
+    GatewayService,
     LoggerService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
   ],
-  controllers: [ApiGatewayController],
+  controllers: [UserController, AuthController],
 })
-export class ApiGatewayModule {}
+export class GatewayModule {}
