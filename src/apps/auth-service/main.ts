@@ -13,7 +13,6 @@ const bootstrap = async () => {
   const loggerService = app.get(LoggerService);
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
-  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       always: true,
@@ -22,7 +21,7 @@ const bootstrap = async () => {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-
+  app.useGlobalFilters(new AllExceptionsFilter());
   const port: number = configService.get('app.auth.port') as number;
   const msPort: number = configService.get('app.auth.msPort') as number;
   const appName: string = configService.get('app.auth.name') as string;
