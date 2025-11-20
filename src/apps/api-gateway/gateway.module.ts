@@ -23,7 +23,7 @@ import { GatewayService } from './gateway.service';
           transport: Transport.TCP,
           options: {
             host: configService.get<string>('app.auth.host'),
-            port: configService.get<number>('app.auth.port'),
+            port: configService.get<number>('app.auth.msPort'),
           },
         }),
       },
@@ -35,7 +35,7 @@ import { GatewayService } from './gateway.service';
           transport: Transport.TCP,
           options: {
             host: configService.get<string>('app.user.host'),
-            port: configService.get<number>('app.user.port'),
+            port: configService.get<number>('app.user.msPort'),
           },
         }),
       },

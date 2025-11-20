@@ -6,6 +6,7 @@ import { TokenService } from '@shared/token/token.service';
 import { Request } from 'express';
 
 import { UnauthenicationError } from '../common/gateway.error';
+import { IS_PUBLIC_KEY } from '../decorators/public-api.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -15,6 +16,13 @@ export class AuthGuard implements CanActivate {
     private readonly logger: LoggerService,
   ) {}
   async canActivate(context: ExecutionContext) {
+    const isPulict = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPulict) {
+      return true;
+    }
     const request: Request & { user: ITokenPayload } = context
       .switchToHttp()
       .getRequest();

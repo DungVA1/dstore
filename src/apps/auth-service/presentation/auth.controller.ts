@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
+import { MessagePattern } from '@nestjs/microservices';
 
 import { LoginCommand } from '../application/command/login/login.command';
 import { RegisterCommand } from '../application/command/register/register.command';
@@ -16,6 +17,7 @@ export class AuthController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @Post('login')
+  @MessagePattern({ cmd: 'auth.login' })
   login(@Body() body: LoginDTO) {
     return this.commandBus.execute(
       new LoginCommand(body.email, body.password, body.remember),
@@ -23,6 +25,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @MessagePattern({ cmd: 'auth.register' })
   register(@Body() body: RegisterDTO) {
     return this.commandBus.execute(
       new RegisterCommand(body.email, body.password),
@@ -30,11 +33,13 @@ export class AuthController {
   }
 
   @Post('resend-otp')
+  @MessagePattern({ cmd: 'auth.resendOTP' })
   resendVerificationCode(@Body() body: ResendOtpDTO) {
     return this.commandBus.execute(new ResendCodeCommand(body.email));
   }
 
   @Post('verify-otp')
+  @MessagePattern({ cmd: 'auth.verifyOTP' })
   verifyOtp(@Body() body: VerifyTokenDTO) {
     return this.commandBus.execute(
       new VerifyTokenCommand(body.email, body.token),

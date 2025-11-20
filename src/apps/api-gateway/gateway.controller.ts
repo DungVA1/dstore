@@ -1,9 +1,11 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { Public } from './decorators/public-api.decorator';
+import { GatewayService } from './gateway.service';
 
 @Controller('users')
 export class UserController {
+  constructor(private readonly gatewayService: GatewayService) {}
   @Get()
   getUser() {
     return {
@@ -15,10 +17,9 @@ export class UserController {
 @Public()
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly gatewayService: GatewayService) {}
   @Post('login')
-  login() {
-    return {
-      status: 200,
-    };
+  login(@Body() body) {
+    return this.gatewayService.login(body);
   }
 }

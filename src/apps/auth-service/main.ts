@@ -2,6 +2,7 @@ import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
 
 import { AuthModule } from './auth.module';
@@ -23,11 +24,18 @@ const bootstrap = async () => {
   );
 
   const port: number = configService.get('app.auth.port') as number;
+  const msPort: number = configService.get('app.auth.msPort') as number;
   const appName: string = configService.get('app.auth.name') as string;
   loggerService.setContext(appName);
-  await app.listen(port, () => {
-    loggerService.log(`${appName} is running on port ${port}`);
+  app.connectMicroservice({
+    transport: Transport.TCP,
+    options: { port: msPort },
   });
+  await app.startAllMicroservices();
+  await app.listen(port, () => {
+    loggerService.log(`${appName} API is running on port ${port}`);
+  });
+  loggerService.log(`${appName} MicroService is running on port ${msPort}`);
 };
 
 bootstrap();

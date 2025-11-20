@@ -11,12 +11,14 @@ export default () => ({
       name: 'AUTH_SERVICE',
       host: process.env.AUTH_SERVICE_HOST || 'localhost',
       port: process.env.AUTH_SERVICE_PORT || 3001,
+      msPort: process.env.AUTH_SERVICE_MS_PORT || 4001,
     },
     user: {
       prefix: 'user',
       name: 'USER_SERVICE',
       host: process.env.USER_SERVICE_HOST || 'localhost',
       port: process.env.USER_SERVICE_PORT || 3002,
+      msPort: process.env.USER_SERVICE_MS_PORT || 4002,
     },
   },
   database: {
