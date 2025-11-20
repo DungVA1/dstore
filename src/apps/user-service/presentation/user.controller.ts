@@ -1,15 +1,7 @@
 import { SuccessResponse } from '@common/based.response';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { CreateUserCommand } from '../application/command/create-user/create-user.command';
 import { DeleteUserCommand } from '../application/command/delete-user/delete-user.command';
@@ -22,15 +14,15 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { GetListUserQueryDTO } from './dto/get-list-users.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 
-@Controller('users')
+@Controller()
 export class UserController {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}
 
-  @Get()
-  async getList(@Query() query: GetListUserQueryDTO) {
+  @MessagePattern('user.getAll')
+  async getList(@Payload() query: GetListUserQueryDTO) {
     const users: UserEntity[] = await this.queryBus.execute(
       new GetUsersQuery(query.limit, query.page, query.sort, query.search),
     );
@@ -38,12 +30,12 @@ export class UserController {
     return new SuccessResponse(users);
   }
 
-  @Get(':id')
+  @MessagePattern('user.getOne')
   getDetail(@Param('id') id: string) {
     return this.queryBus.execute(new GetUserQuery(id));
   }
 
-  @Post()
+  @MessagePattern('user.create')
   async createUser(@Body() createUserDto: CreateUserDTO) {
     await this.commandBus.execute(
       new CreateUserCommand(
@@ -56,7 +48,7 @@ export class UserController {
     );
   }
 
-  @Put(':id')
+  @MessagePattern('user.update')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDTO: UpdateUserDTO,
@@ -71,7 +63,7 @@ export class UserController {
     );
   }
 
-  @Delete(':id')
+  @MessagePattern('user.delete')
   async deleteUser(@Param('id') id: string) {
     await this.commandBus.execute(new DeleteUserCommand(id));
   }

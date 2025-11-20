@@ -1,7 +1,11 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import {
+  MicroserviceOptions,
+  RpcException,
+  Transport,
+} from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
 
 import { UserAppModule } from './user.module';
@@ -15,22 +19,33 @@ const bootstrap = async () => {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
-      always: true,
       transform: true,
       whitelist: true,
       transformOptions: { enableImplicitConversion: true },
+      exceptionFactory: (errors) => {
+        const messages = errors
+          .map((err) => Object.values(err.constraints || {}))
+          .flat();
+
+        return new RpcException({ statusCode: 400, message: messages });
+      },
     }),
   );
 
   const port: number = configService.get('app.user.port') as number;
   const msPort: number = configService.get('app.user.msPort') as number;
   const appName: string = configService.get('app.user.name') as string;
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      port: msPort,
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.TCP,
+      options: {
+        port: msPort,
+      },
     },
-  });
+    {
+      inheritAppConfig: true,
+    },
+  );
   await app.startAllMicroservices();
   await app.listen(port, () => {
     logger.log(`${appName} is running on port ${port}`);
