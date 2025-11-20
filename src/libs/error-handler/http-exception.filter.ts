@@ -6,6 +6,7 @@ import {
   HttpException,
   Logger,
 } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { Response } from 'express';
 
 @Catch()
@@ -13,6 +14,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+
+    if (exception instanceof RpcException) {
+      return exception.getError();
+    }
 
     if (exception instanceof HttpException) {
       const status = exception.getStatus();

@@ -7,7 +7,7 @@ export class UserMSService {
     @Inject('USER_SERVICE') private readonly userClient: ClientProxy,
   ) {}
 
-  getUsers(body) {
-    return this.userClient.send('user.getAll', body);
+  getUsers(query) {
+    return this.userClient.send('user.getAll', query);
   }
 }

@@ -24,11 +24,17 @@ const bootstrap = async () => {
       whitelist: true,
       transformOptions: { enableImplicitConversion: true },
       exceptionFactory: (errors) => {
-        const messages = errors
-          .map((err) => Object.values(err.constraints || {}))
+        const msgs = errors
+          .map((e) => Object.values(e.constraints || {}))
           .flat();
-
-        return new RpcException({ statusCode: 400, message: messages });
+        return new RpcException({
+          ok: false,
+          code: 400,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: msgs.join(', '),
+          },
+        });
       },
     }),
   );

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 
 import { UserMSService } from './user-ms.service';
 
@@ -7,7 +7,7 @@ export class UserMSController {
   constructor(private readonly userMSService: UserMSService) {}
 
   @Get()
-  getUsers() {
-    return this.userMSService.getUsers({ limit: 'aa' });
+  getUsers(@Query() query) {
+    return this.userMSService.getUsers(query);
   }
 }
