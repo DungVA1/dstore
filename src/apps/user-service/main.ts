@@ -1,4 +1,4 @@
-import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
+import { RpcExceptionFilter } from '@libs/error-handler/rpc-exception.filter';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -38,7 +38,7 @@ const bootstrap = async () => {
       },
     }),
   );
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new RpcExceptionFilter());
   const port: number = configService.get('app.user.port') as number;
   const msPort: number = configService.get('app.user.msPort') as number;
   const appName: string = configService.get('app.user.name') as string;
