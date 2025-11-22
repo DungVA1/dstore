@@ -10,6 +10,7 @@ import { NotificationModule } from '@shared/notification/notification.module';
 import { TokenModule } from '@shared/token/token.module';
 
 import { LoginHandler } from './application/command/login/login.handler';
+import { LogoutHandler } from './application/command/logout/logout.handler';
 import { RefreshTokenHandler } from './application/command/refresh-token/refresh-token.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
 import { ResendCodeHandler } from './application/command/resend-code/resend-code.handler';
@@ -50,6 +51,7 @@ import { AuthController } from './presentation/auth.controller';
     ResendCodeHandler,
     VerifyTokenHandler,
     RefreshTokenHandler,
+    LogoutHandler,
   ],
 })
 export class AuthModule {}

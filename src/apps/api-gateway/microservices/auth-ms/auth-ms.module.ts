@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { LoggerService } from '@shared/logger/logger.service';
+import { TokenModule } from '@shared/token/token.module';
 
 import { AuthMSController } from './auth-ms.controller';
 import { AuthMSService } from './auth-ms.service';
@@ -21,8 +23,9 @@ import { AuthMSService } from './auth-ms.service';
         }),
       },
     ]),
+    TokenModule,
   ],
   controllers: [AuthMSController],
-  providers: [AuthMSService],
+  providers: [AuthMSService, LoggerService],
 })
 export class AuthMSModule {}

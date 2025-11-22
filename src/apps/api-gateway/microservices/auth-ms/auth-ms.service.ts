@@ -11,7 +11,23 @@ export class AuthMSService {
     return this.authClient.send('auth.login', body);
   }
 
+  register(body) {
+    return this.authClient.send('auth.register', body);
+  }
+
+  resendOtp(body) {
+    return this.authClient.send('auth.resendOtp', body);
+  }
+
+  verifyOtp(body) {
+    return this.authClient.send('auth.verifyOtp', body);
+  }
+
   refreshToken(body) {
     return this.authClient.send('auth.refreshToken', body);
+  }
+
+  logout(body) {
+    return this.authClient.send('auth.logout', body);
   }
 }
