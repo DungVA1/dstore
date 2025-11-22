@@ -10,4 +10,8 @@ export class AuthMSService {
   login(body) {
     return this.authClient.send('auth.login', body);
   }
+
+  refreshToken(body) {
+    return this.authClient.send('auth.refreshToken', body);
+  }
 }

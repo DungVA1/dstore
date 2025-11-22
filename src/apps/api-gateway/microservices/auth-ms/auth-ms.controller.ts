@@ -12,4 +12,9 @@ export class AuthMSController {
   login(@Body() body) {
     return this.authMSService.login(body);
   }
+
+  @Post('refresh-token')
+  refreshToken(@Body() body) {
+    return this.authMSService.refreshToken(body);
+  }
 }

@@ -10,7 +10,7 @@ import {
 
 import { AccountModel } from './account.model';
 
-@Entity('refresh_token')
+@Entity('refresh_tokens')
 export class RefreshTokenModel extends BasedModel {
   @PrimaryColumn({
     name: 'id',
@@ -41,13 +41,6 @@ export class RefreshTokenModel extends BasedModel {
     nullable: false,
   })
   expiredAt: Date;
-
-  @Column({
-    name: 'used_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  usedAt?: Date;
 
   @CreateDateColumn({
     name: 'created_at',

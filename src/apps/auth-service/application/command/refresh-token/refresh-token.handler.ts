@@ -1,3 +1,4 @@
+import { SuccessResponse } from '@common/based.response';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GeneratorService } from '@shared/generator/generator.service';
@@ -46,5 +47,10 @@ export class RefreshTokenHandler
       tokenPayload.accountId,
       token.refreshTokenExpiresAt,
     );
+
+    return new SuccessResponse({
+      accessToken: token.accessToken,
+      refreshToken: token.refreshToken,
+    });
   }
 }
