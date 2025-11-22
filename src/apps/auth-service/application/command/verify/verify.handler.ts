@@ -10,7 +10,7 @@ import {
   AccountIsLockedError,
   AccountIsNotRegistered,
   EmailNotExistedError,
-  VerificationTokenIsWroingOrExpired,
+  VerificationTokenIsWrongOrExpired,
 } from '../../account-application.error';
 import { IAccountRepository } from '../../account-repository.interface';
 
@@ -42,7 +42,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
 
     const verificationToken = account.verificationTokens[0];
     if (!verificationToken) {
-      throw new VerificationTokenIsWroingOrExpired();
+      throw new VerificationTokenIsWrongOrExpired();
     }
     const isValid = await EncryptionLib.compare(
       token,
@@ -50,7 +50,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     );
 
     if (!isValid) {
-      throw new VerificationTokenIsWroingOrExpired();
+      throw new VerificationTokenIsWrongOrExpired();
     }
     await this.repo.useVerificationToken(verificationToken.id);
 

@@ -81,10 +81,10 @@ export class AccountRepository implements IAccountRepository {
     });
   }
 
-  getRefreshToken(refreshToken: string): Promise<RefreshTokenModel | null> {
+  getRefreshToken(accountId: string): Promise<RefreshTokenModel | null> {
     return this.refreshTokenModel.findOne({
       where: {
-        refreshToken,
+        accountId,
       },
     });
   }

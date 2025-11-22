@@ -11,7 +11,7 @@ export interface IAccountRepository {
   invalidAllVerificationTokens(accountId: string);
   createVerificationToken(id: string, accountId: string, token: string);
   useVerificationToken(tokenId: string);
-  getRefreshToken(refreshToken: string): Promise<RefreshTokenModel | null>;
+  getRefreshToken(accountId: string): Promise<RefreshTokenModel | null>;
   createRefreshToken(
     id: string,
     refreshToken: string,

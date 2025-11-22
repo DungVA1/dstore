@@ -55,9 +55,16 @@ export class AccountIsNotRegistered extends AccountApplicationError {
   }
 }
 
-export class VerificationTokenIsWroingOrExpired extends AccountApplicationError {
+export class VerificationTokenIsWrongOrExpired extends AccountApplicationError {
   httpStatus = 400;
   constructor() {
     super('VERIFICATION_IS_WRONG_OR_EXPIRED', 'token is not wrong or expired');
+  }
+}
+
+export class RefreshTokenIsInvalid extends AccountApplicationError {
+  httpStatus = 400;
+  constructor() {
+    super('REFRESH_TOKEN_IS_INVALID', 'refreshToken is invalid');
   }
 }
