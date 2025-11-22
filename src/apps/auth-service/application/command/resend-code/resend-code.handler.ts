@@ -35,7 +35,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
       throw new AccountAlreadyActivedError();
     }
 
-    await this.repo.invalidAllTokens(account.id.toString());
+    await this.repo.invalidAllVerificationTokens(account.id.toString());
     const verificationCode = this.generatorService.generateOTP();
     this.repo.createVerificationToken(
       this.generatorService.generateId(),

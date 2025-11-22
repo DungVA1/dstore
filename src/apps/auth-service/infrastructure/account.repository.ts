@@ -3,8 +3,9 @@ import { Repository } from 'typeorm';
 
 import { IAccountRepository } from '../application/account-repository.interface';
 
-import { AccountModel } from './account.model';
-import { VerificationTokenModel } from './verification-code.model';
+import { AccountModel } from './models/account.model';
+import { RefreshTokenModel } from './models/refresh-token.model';
+import { VerificationTokenModel } from './models/verification-code.model';
 
 export class AccountRepository implements IAccountRepository {
   constructor(
@@ -12,6 +13,8 @@ export class AccountRepository implements IAccountRepository {
     private readonly accountModel: Repository<AccountModel>,
     @InjectRepository(VerificationTokenModel)
     private readonly verificationTokenModel: Repository<VerificationTokenModel>,
+    @InjectRepository(RefreshTokenModel)
+    private readonly refreshTokenModel: Repository<RefreshTokenModel>,
   ) {}
   async save(account: AccountModel) {
     await this.accountModel.save(account);
@@ -51,7 +54,7 @@ export class AccountRepository implements IAccountRepository {
       .getOne();
   }
 
-  invalidAllTokens(accountId: string) {
+  invalidAllVerificationTokens(accountId: string) {
     return this.verificationTokenModel.update(
       { accountId },
       { expiredAt: new Date() },
@@ -71,10 +74,35 @@ export class AccountRepository implements IAccountRepository {
     return id;
   }
 
-  async useToken(tokenId: string) {
+  async useVerificationToken(tokenId: string) {
     const current = new Date();
     await this.verificationTokenModel.update(tokenId, {
       usedAt: current,
     });
+  }
+
+  getRefreshToken(refreshToken: string): Promise<RefreshTokenModel | null> {
+    return this.refreshTokenModel.findOne({
+      where: {
+        refreshToken,
+      },
+    });
+  }
+  createRefreshToken(
+    id: string,
+    refreshToken: string,
+    accountId: string,
+    expiredAt: Date,
+  ) {
+    return this.refreshTokenModel.save({
+      id,
+      accountId,
+      refreshToken,
+      expiredAt,
+      createdAt: new Date(),
+    });
+  }
+  useRefreshToken(id: string) {
+    return this.refreshTokenModel.delete(id);
   }
 }

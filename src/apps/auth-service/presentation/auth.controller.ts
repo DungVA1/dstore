@@ -3,11 +3,13 @@ import { CommandBus } from '@nestjs/cqrs';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { LoginCommand } from '../application/command/login/login.command';
+import { RefreshTokenCommand } from '../application/command/refresh-token/refresh-token.command';
 import { RegisterCommand } from '../application/command/register/register.command';
 import { ResendCodeCommand } from '../application/command/resend-code/resend-code.command';
 import { VerifyTokenCommand } from '../application/command/verify/verify.command';
 
 import { LoginDTO } from './dto/login.dto';
+import { RefreshTokenDTO } from './dto/refresh-token.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { ResendOtpDTO } from './dto/resend-otp.dto';
 import { VerifyTokenDTO } from './dto/verify-otp.dto';
@@ -34,5 +36,10 @@ export class AuthController {
   @MessagePattern('auth.verifyOTP')
   verifyOtp(@Payload() { email, token }: VerifyTokenDTO) {
     return this.commandBus.execute(new VerifyTokenCommand(email, token));
+  }
+
+  @MessagePattern('auth.refreshToken')
+  refreshToken(@Payload() { refreshToken }: RefreshTokenDTO) {
+    return this.commandBus.execute(new RefreshTokenCommand(refreshToken));
   }
 }

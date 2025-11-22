@@ -52,7 +52,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     if (!isValid) {
       throw new VerificationTokenIsWroingOrExpired();
     }
-    await this.repo.useToken(verificationToken.id);
+    await this.repo.useVerificationToken(verificationToken.id);
 
     return new SuccessResponse(account);
   }

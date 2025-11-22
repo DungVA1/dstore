@@ -3,8 +3,8 @@ import { IMapper } from '@common/based.mapper';
 import { VerificationToken } from '../common/verification-token.type';
 import { AccountEntity } from '../domain/account.entity';
 
-import { AccountModel } from './account.model';
-import { VerificationTokenModel } from './verification-code.model';
+import { AccountModel } from './models/account.model';
+import { VerificationTokenModel } from './models/verification-code.model';
 
 export class AccountMapper implements IMapper {
   toModel(accountEntity: AccountEntity): AccountModel {

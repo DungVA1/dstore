@@ -9,12 +9,14 @@ import { NotificationModule } from '@shared/notification/notification.module';
 import { TokenModule } from '@shared/token/token.module';
 
 import { LoginHandler } from './application/command/login/login.handler';
+import { RefreshTokenHandler } from './application/command/refresh-token/refresh-token.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
 import { ResendCodeHandler } from './application/command/resend-code/resend-code.handler';
 import { VerifyTokenHandler } from './application/command/verify/verify.handler';
-import { AccountModel } from './infrastructure/account.model';
 import { AccountRepository } from './infrastructure/account.repository';
-import { VerificationTokenModel } from './infrastructure/verification-code.model';
+import { AccountModel } from './infrastructure/models/account.model';
+import { RefreshTokenModel } from './infrastructure/models/refresh-token.model';
+import { VerificationTokenModel } from './infrastructure/models/verification-code.model';
 import { AuthController } from './presentation/auth.controller';
 
 @Module({
@@ -22,7 +24,11 @@ import { AuthController } from './presentation/auth.controller';
     CqrsModule,
     AppConfigModule,
     DatabaseModule,
-    TypeOrmModule.forFeature([AccountModel, VerificationTokenModel]),
+    TypeOrmModule.forFeature([
+      AccountModel,
+      VerificationTokenModel,
+      RefreshTokenModel,
+    ]),
     GeneratorModule,
     NotificationModule,
     TokenModule,
@@ -41,6 +47,7 @@ import { AuthController } from './presentation/auth.controller';
     RegisterHandler,
     ResendCodeHandler,
     VerifyTokenHandler,
+    RefreshTokenHandler,
   ],
 })
 export class AuthModule {}

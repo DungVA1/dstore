@@ -8,9 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { AccountStatus } from '../common/account.enum';
+import { AccountStatus } from '../../common/account.enum';
 
 import { VerificationTokenModel } from './verification-code.model';
+import { RefreshTokenModel } from './refresh-token.model';
 
 @Entity('accounts')
 export class AccountModel extends BasedModel {
@@ -63,4 +64,9 @@ export class AccountModel extends BasedModel {
     cascade: ['insert', 'remove'],
   })
   verificationTokens: VerificationTokenModel[];
+
+  @OneToMany(() => RefreshTokenModel, (token) => token.account, {
+    cascade: ['insert', 'remove'],
+  })
+  refreshTokens: RefreshTokenModel[];
 }

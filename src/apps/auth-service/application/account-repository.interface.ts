@@ -1,4 +1,5 @@
-import { AccountModel } from '../infrastructure/account.model';
+import { AccountModel } from '../infrastructure/models/account.model';
+import { RefreshTokenModel } from '../infrastructure/models/refresh-token.model';
 
 export interface IAccountRepository {
   save(account: AccountModel): Promise<AccountModel>;
@@ -7,7 +8,15 @@ export interface IAccountRepository {
   getByEmail(email: string): Promise<AccountModel | null>;
   getList(options: Record<string, any>): Promise<AccountModel[]>;
   getAccountByEmailWithTokens(email: string): Promise<AccountModel | null>;
-  invalidAllTokens(accountId: string);
+  invalidAllVerificationTokens(accountId: string);
   createVerificationToken(id: string, accountId: string, token: string);
-  useToken(tokenId: string);
+  useVerificationToken(tokenId: string);
+  getRefreshToken(refreshToken: string): Promise<RefreshTokenModel | null>;
+  createRefreshToken(
+    id: string,
+    refreshToken: string,
+    accountId: string,
+    expiredAt: Date,
+  );
+  useRefreshToken(id: string);
 }
