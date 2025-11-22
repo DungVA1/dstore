@@ -32,7 +32,6 @@ export class TokenService {
     );
 
     const current = Date.now();
-
     return {
       accessToken,
       accessTokenExpiresAt: new Date(
