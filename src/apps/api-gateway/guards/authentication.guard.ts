@@ -37,20 +37,10 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { accountId, jti }: TokenPayload =
+      const { accountId }: TokenPayload =
         await this.tokenService.validateToken(token);
 
-      const invalidToken = await this.cacheService.get(
-        `${accountId}_logout_token_id`,
-      );
-
-      console.log(invalidToken, jti)
-      if (invalidToken === jti) {
-        throw new UnauthenicationError();
-      }
-
       request.headers['x-account-id'] = accountId;
-      request.headers['x-jwt-id'] = jti;
     } catch (e) {
       this.logger.error(e);
       throw new UnauthenicationError();

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable } from '@nestjs/common';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import type { Redis } from 'ioredis';
@@ -19,9 +22,5 @@ export class CacheService {
 
   async del(key: string): Promise<number> {
     return await this.redis.del(key);
-  }
-
-  async push(key: string, item: string): Promise<number> {
-    return await this.redis.lpush(key, item);
   }
 }

@@ -17,8 +17,6 @@ export class LogoutHandler implements ICommandHandler<LogoutCommand> {
 
   async execute(command: LogoutCommand): Promise<SuccessResponse> {
     await this.repo.invalidRefreshTokens(command.accountId);
-    const key = `${command.accountId}_logout_token_id`;
-    await this.cacheService.set(key, command.tokenId);
 
     return new SuccessResponse();
   }
