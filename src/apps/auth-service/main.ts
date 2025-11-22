@@ -1,4 +1,4 @@
-import { AllExceptionsFilter } from '@libs/error-handler/http-exception.filter';
+import { RpcExceptionFilter } from '@libs/error-handler/rpc-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -21,15 +21,20 @@ const bootstrap = async () => {
       transformOptions: { enableImplicitConversion: true },
     }),
   );
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new RpcExceptionFilter());
   const port: number = configService.get('app.auth.port') as number;
   const msPort: number = configService.get('app.auth.msPort') as number;
   const appName: string = configService.get('app.auth.name') as string;
   loggerService.setContext(appName);
-  app.connectMicroservice({
-    transport: Transport.TCP,
-    options: { port: msPort },
-  });
+  app.connectMicroservice(
+    {
+      transport: Transport.TCP,
+      options: { port: msPort },
+    },
+    {
+      inheritAppConfig: true,
+    },
+  );
   await app.startAllMicroservices();
   await app.listen(port, () => {
     loggerService.log(`${appName} API is running on port ${port}`);

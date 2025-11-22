@@ -15,7 +15,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
 
     if (exception && typeof exception === 'object' && 'ok' in exception) {
-      const statusCode = (exception as { ok: boolean; code: number }).code;
+      const statusCode = (exception as { ok: boolean; httpStatus: number })
+        .httpStatus;
       return response.status(statusCode).json(exception);
     }
 
@@ -32,7 +33,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof ApplicationError) {
       return response.status(exception.httpStatus).json({
         ok: false,
-        code: exception.httpStatus,
+        httpStatus: exception.httpStatus,
         error: {
           code: exception.code,
           message: exception.message,

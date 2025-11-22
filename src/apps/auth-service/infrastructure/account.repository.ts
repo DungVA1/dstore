@@ -82,11 +82,12 @@ export class AccountRepository implements IAccountRepository {
   }
 
   getRefreshToken(accountId: string): Promise<RefreshTokenModel | null> {
-    return this.refreshTokenModel.findOne({
-      where: {
-        accountId,
-      },
-    });
+    const qb = this.refreshTokenModel.createQueryBuilder('rt');
+    qb.where('account_id = :accountId', { accountId }).andWhere(
+      'expired_at >= :expiredAt',
+      { expiredAt: new Date() },
+    );
+    return qb.getOne();
   }
   createRefreshToken(
     id: string,

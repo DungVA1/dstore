@@ -38,9 +38,7 @@ export class TokenService {
         current + +this.configService.get('secret.access_token_expires_in'),
       ),
       refreshToken,
-      refreshTokenExpiresAt: new Date(
-        current + +this.configService.get('secret.refresh_token_expires_in'),
-      ),
+      refreshTokenExpiresAt: new Date(),
     };
   }
 

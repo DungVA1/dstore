@@ -1,4 +1,5 @@
 import { ApplicationError } from '@common/based.error';
+import { HttpStatus } from '@nestjs/common';
 
 class GatewayError extends ApplicationError {
   constructor(code: string, message: string) {
@@ -7,7 +8,7 @@ class GatewayError extends ApplicationError {
 }
 
 export class UnauthenicationError extends GatewayError {
-  httpStatus = 401;
+  httpStatus: HttpStatus = HttpStatus.UNAUTHORIZED;
   constructor() {
     super('UNAUTHENTICATION', 'token is valid or expired');
   }

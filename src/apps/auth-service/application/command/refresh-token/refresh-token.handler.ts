@@ -34,13 +34,16 @@ export class RefreshTokenHandler
       tokenPayload.accountId,
     );
 
-    if (
-      !refreshToken ||
-      !(await this.encryptionLib.compare(
-        command.refreshToken,
-        refreshToken.token,
-      ))
-    ) {
+    if (!refreshToken) {
+      throw new RefreshTokenIsInvalid();
+    }
+
+    const isValidToken = await this.encryptionLib.compare(
+      command.refreshToken,
+      refreshToken.token,
+    );
+
+    if (!isValidToken) {
       throw new RefreshTokenIsInvalid();
     }
 

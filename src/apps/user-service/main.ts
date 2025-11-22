@@ -29,7 +29,7 @@ const bootstrap = async () => {
           .flat();
         return new RpcException({
           ok: false,
-          code: 400,
+          httpStatus: 400,
           error: {
             code: 'VALIDATION_ERROR',
             message: msgs.join(', '),
