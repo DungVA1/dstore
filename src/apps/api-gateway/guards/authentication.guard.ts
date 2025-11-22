@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { LoggerService } from '@shared/logger/logger.service';
-import { ITokenPayload } from '@shared/token/token.interface';
+import { TokenPayload } from '@shared/token/token.interface';
 import { TokenService } from '@shared/token/token.service';
 import { Request } from 'express';
 
@@ -16,14 +16,16 @@ export class AuthGuard implements CanActivate {
     private readonly logger: LoggerService,
   ) {}
   async canActivate(context: ExecutionContext) {
-    const isPulict = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPulict) {
+
+    if (isPublic) {
       return true;
     }
-    const request: Request & { user: ITokenPayload } = context
+
+    const request: Request & { user: TokenPayload } = context
       .switchToHttp()
       .getRequest();
     const { authorization } = request.headers;
@@ -33,7 +35,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload: ITokenPayload =
+      const payload: TokenPayload =
         await this.tokenService.validateToken(token);
       request.headers['x-account-id'] = payload.accountId;
     } catch (e) {

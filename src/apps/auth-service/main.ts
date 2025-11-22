@@ -2,7 +2,7 @@ import { RpcExceptionFilter } from '@libs/error-handler/rpc-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { Transport } from '@nestjs/microservices';
+import { RpcException, Transport } from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
 
 import { AuthModule } from './auth.module';
@@ -15,10 +15,22 @@ const bootstrap = async () => {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
-      always: true,
       transform: true,
       whitelist: true,
       transformOptions: { enableImplicitConversion: true },
+      exceptionFactory: (errors) => {
+        const msgs = errors
+          .map((e) => Object.values(e.constraints || {}))
+          .flat();
+        return new RpcException({
+          ok: false,
+          httpStatus: 400,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: msgs.join(', '),
+          },
+        });
+      },
     }),
   );
   app.useGlobalFilters(new RpcExceptionFilter());

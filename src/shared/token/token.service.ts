@@ -12,6 +12,7 @@ export class TokenService {
     private readonly jwt: JwtService,
     private readonly configService: ConfigService,
   ) {}
+
   async generateToken(payload: TokenPayload): Promise<TokenPair> {
     const jwtId = crypto.randomBytes(16).toString('hex');
     const accessToken = await this.jwt.signAsync(payload, {
