@@ -53,6 +53,7 @@ export class AccountMapper implements IMapper {
             verTokenModel.attempts,
             verTokenModel.createdAt,
             verTokenModel.usedAt,
+            accountModel.id,
           );
 
           return verToken;

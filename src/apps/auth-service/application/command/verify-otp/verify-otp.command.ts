@@ -1,4 +1,4 @@
-export class VerifyTokenCommand {
+export class VerifyOtpCommand {
   constructor(
     public readonly email: string,
     public readonly token: string,

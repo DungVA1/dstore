@@ -10,6 +10,7 @@ export interface IAccountRepository {
   getAccountByEmailWithTokens(email: string): Promise<AccountModel | null>;
   invalidAllVerificationTokens(accountId: string);
   createVerificationToken(id: string, accountId: string, token: string);
+  increaseVerificationTokenAttemps(id: string, attemps: number);
   useVerificationToken(tokenId: string);
   getRefreshToken(accountId: string): Promise<RefreshTokenModel | null>;
   createRefreshToken(

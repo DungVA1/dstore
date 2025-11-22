@@ -7,7 +7,7 @@ import { LogoutCommand } from '../application/command/logout/logout.command';
 import { RefreshTokenCommand } from '../application/command/refresh-token/refresh-token.command';
 import { RegisterCommand } from '../application/command/register/register.command';
 import { ResendCodeCommand } from '../application/command/resend-code/resend-code.command';
-import { VerifyTokenCommand } from '../application/command/verify/verify.command';
+import { VerifyOtpCommand } from '../application/command/verify-otp/verify-otp.command';
 
 import { LoginDTO } from './dto/login.dto';
 import { LogoutDTO } from './dto/logout.dto';
@@ -37,7 +37,7 @@ export class AuthController {
 
   @MessagePattern('auth.verifyOtp')
   verifyOtp(@Payload() { email, token }: VerifyTokenDTO) {
-    return this.commandBus.execute(new VerifyTokenCommand(email, token));
+    return this.commandBus.execute(new VerifyOtpCommand(email, token));
   }
 
   @MessagePattern('auth.refreshToken')

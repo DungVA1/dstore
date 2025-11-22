@@ -17,7 +17,7 @@ import { LogoutHandler } from './application/command/logout/logout.handler';
 import { RefreshTokenHandler } from './application/command/refresh-token/refresh-token.handler';
 import { RegisterHandler } from './application/command/register/register.handler';
 import { ResendCodeHandler } from './application/command/resend-code/resend-code.handler';
-import { VerifyTokenHandler } from './application/command/verify/verify.handler';
+import { VerifyOtpHandler } from './application/command/verify-otp/verify-otp.handler';
 import { AccountRepository } from './infrastructure/account.repository';
 import { AccountModel } from './infrastructure/models/account.model';
 import { RefreshTokenModel } from './infrastructure/models/refresh-token.model';
@@ -55,7 +55,7 @@ import { AuthController } from './presentation/auth.controller';
     LoginHandler,
     RegisterHandler,
     ResendCodeHandler,
-    VerifyTokenHandler,
+    VerifyOtpHandler,
     RefreshTokenHandler,
     LogoutHandler,
   ],

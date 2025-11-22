@@ -74,6 +74,10 @@ export class AccountRepository implements IAccountRepository {
     return id;
   }
 
+  increaseVerificationTokenAttemps(id: string, attempts: number) {
+    return this.verificationTokenModel.update({ id }, { attempts });
+  }
+
   async useVerificationToken(tokenId: string) {
     const current = new Date();
     await this.verificationTokenModel.update(tokenId, {
@@ -89,6 +93,7 @@ export class AccountRepository implements IAccountRepository {
     );
     return qb.getOne();
   }
+
   createRefreshToken(
     id: string,
     token: string,
@@ -103,6 +108,7 @@ export class AccountRepository implements IAccountRepository {
       createdAt: new Date(),
     });
   }
+
   invalidRefreshTokens(accountId: string) {
     return this.refreshTokenModel.delete({ accountId });
   }

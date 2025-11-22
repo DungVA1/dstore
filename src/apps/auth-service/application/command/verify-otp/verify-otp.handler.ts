@@ -14,17 +14,17 @@ import {
 } from '../../account-application.error';
 import { IAccountRepository } from '../../account-repository.interface';
 
-import { VerifyTokenCommand } from './verify.command';
+import { VerifyOtpCommand } from './verify-otp.command';
 
-@CommandHandler(VerifyTokenCommand)
-export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
+@CommandHandler(VerifyOtpCommand)
+export class VerifyOtpHandler implements ICommandHandler<VerifyOtpCommand> {
   constructor(
     @Inject('IAccountRepository')
     private readonly repo: IAccountRepository,
     private readonly encryptionLib: EncryptionLib,
   ) {}
 
-  async execute(command: VerifyTokenCommand): Promise<SuccessResponse> {
+  async execute(command: VerifyOtpCommand): Promise<SuccessResponse> {
     const { email, token } = command;
     const accountModel = await this.repo.getAccountByEmailWithTokens(email);
     if (!accountModel) {
@@ -42,15 +42,25 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     }
 
     const verificationToken = account.verificationTokens[0];
+
     if (!verificationToken) {
       throw new VerificationTokenIsWrongOrExpired();
     }
+
+    if (verificationToken.attempts >= 5) {
+      throw new VerificationTokenIsWrongOrExpired();
+    }
+
     const isValid = await this.encryptionLib.compare(
       token,
       verificationToken?.token,
     );
 
     if (!isValid) {
+      await this.repo.increaseVerificationTokenAttemps(
+        verificationToken.id,
+        verificationToken.attempts + 1,
+      );
       throw new VerificationTokenIsWrongOrExpired();
     }
     await this.repo.useVerificationToken(verificationToken.id);

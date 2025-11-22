@@ -10,8 +10,8 @@ import {
 
 import { AccountStatus } from '../../common/account.enum';
 
-import { VerificationTokenModel } from './verification-code.model';
 import { RefreshTokenModel } from './refresh-token.model';
+import { VerificationTokenModel } from './verification-code.model';
 
 @Entity('accounts')
 export class AccountModel extends BasedModel {
