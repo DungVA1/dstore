@@ -24,7 +24,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     private readonly encryptionLib: EncryptionLib,
   ) {}
 
-  async execute(command: VerifyTokenCommand) {
+  async execute(command: VerifyTokenCommand): Promise<SuccessResponse> {
     const { email, token } = command;
     const accountModel = await this.repo.getAccountByEmailWithTokens(email);
     if (!accountModel) {

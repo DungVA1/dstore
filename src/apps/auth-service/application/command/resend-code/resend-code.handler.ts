@@ -25,7 +25,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
     private readonly encryptionLib: EncryptionLib,
   ) {}
 
-  async execute(command: ResendCodeCommand): Promise<any> {
+  async execute(command: ResendCodeCommand): Promise<SuccessResponse> {
     const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {
       throw new EmailNotExistedError();

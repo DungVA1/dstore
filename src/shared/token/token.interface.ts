@@ -1,5 +1,6 @@
 export interface TokenPayload {
   accountId: string;
+  jti?: string;
 }
 
 export type TokenPair = {

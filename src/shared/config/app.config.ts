@@ -34,4 +34,9 @@ export default () => ({
     refresh_token_expires_in: 30 * 24 * 60 * 60, // 30d in second
     otp: process.env.OTP_SECRET,
   },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    password: process.env.REDIS_PASSWORD,
+  },
 });

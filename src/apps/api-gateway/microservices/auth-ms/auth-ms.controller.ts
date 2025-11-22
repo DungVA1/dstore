@@ -38,7 +38,13 @@ export class AuthMSController {
 
   @Private()
   @Post('logout')
-  logout(@Headers('x-account-id') accountId: string) {
-    return this.authMSService.logout({ accountId: accountId });
+  logout(
+    @Headers('x-account-id') accountId: string,
+    @Headers('x-jwt-id') tokenId: string,
+  ) {
+    return this.authMSService.logout({
+      accountId: accountId,
+      tokenId: tokenId,
+    });
   }
 }

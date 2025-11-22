@@ -22,7 +22,7 @@ export class RefreshTokenHandler
     private readonly generatorService: GeneratorService,
     private readonly encryptionLib: EncryptionLib,
   ) {}
-  async execute(command: RefreshTokenCommand): Promise<any> {
+  async execute(command: RefreshTokenCommand): Promise<SuccessResponse> {
     const tokenPayload: TokenPayload = await this.tokenService.validateToken(
       command.refreshToken,
     );

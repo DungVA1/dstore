@@ -10,6 +10,7 @@ import { ResendCodeCommand } from '../application/command/resend-code/resend-cod
 import { VerifyTokenCommand } from '../application/command/verify/verify.command';
 
 import { LoginDTO } from './dto/login.dto';
+import { LogoutDTO } from './dto/logout.dto';
 import { RefreshTokenDTO } from './dto/refresh-token.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { ResendOtpDTO } from './dto/resend-otp.dto';
@@ -45,7 +46,7 @@ export class AuthController {
   }
 
   @MessagePattern('auth.logout')
-  logout(@Payload() { accountId }: { accountId: string }) {
-    return this.commandBus.execute(new LogoutCommand(accountId));
+  logout(@Payload() { accountId, tokenId }: LogoutDTO) {
+    return this.commandBus.execute(new LogoutCommand(accountId, tokenId));
   }
 }

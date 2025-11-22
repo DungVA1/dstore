@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { CacheService } from '@shared/cache/cache.service';
 import { LoggerService } from '@shared/logger/logger.service';
 import { TokenPayload } from '@shared/token/token.interface';
 import { TokenService } from '@shared/token/token.service';
@@ -14,6 +15,7 @@ export class AuthGuard implements CanActivate {
     private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
     private readonly logger: LoggerService,
+    private readonly cacheService: CacheService,
   ) {}
   async canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -35,9 +37,20 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload: TokenPayload =
+      const { accountId, jti }: TokenPayload =
         await this.tokenService.validateToken(token);
-      request.headers['x-account-id'] = payload.accountId;
+
+      const invalidToken = await this.cacheService.get(
+        `${accountId}_logout_token_id`,
+      );
+
+      console.log(invalidToken, jti)
+      if (invalidToken === jti) {
+        throw new UnauthenicationError();
+      }
+
+      request.headers['x-account-id'] = accountId;
+      request.headers['x-jwt-id'] = jti;
     } catch (e) {
       this.logger.error(e);
       throw new UnauthenicationError();

@@ -9,16 +9,19 @@ import { CacheService } from './cache.service';
     RedisModule.forRootAsync({
       inject: [ConfigService],
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'single',
-        options: {
-          host: configService.get<string>('redis.host'),
-          port: configService.get<number>('redis.port'),
-          password: configService.get<string>('redis.password'),
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'single',
+          options: {
+            host: configService.get<string>('redis.host'),
+            port: configService.get<number>('redis.port'),
+            password: configService.get<string>('redis.password'),
+          },
+        };
+      },
     }),
   ],
   providers: [CacheService],
+  exports: [CacheService],
 })
 export class CacheModule {}

@@ -22,7 +22,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     private readonly encryptionLib: EncryptionLib,
   ) {}
 
-  async execute(command: RegisterCommand): Promise<any> {
+  async execute(command: RegisterCommand): Promise<SuccessResponse> {
     const existedAccount = await this.repo.getByEmail(command.email);
     if (existedAccount) {
       throw new EmailAlreadyUsedError();
