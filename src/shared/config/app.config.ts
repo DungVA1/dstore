@@ -30,8 +30,8 @@ export default () => ({
   },
   secret: {
     jwt: process.env.JWT_SECRET,
-    access_token_expires_in: 15 * 60 * 1000, //15m in milisecond
-    refresh_token_expires_in: 30 * 24 * 60 * 60 * 1000, // 30d in milisecond
+    access_token_expires_in: 15 * 60, //15m in second
+    refresh_token_expires_in: 30 * 24 * 60 * 60, // 30d in second
     otp: process.env.OTP_SECRET,
   },
 });

@@ -5,6 +5,7 @@ import * as crypto from 'crypto';
 
 import { ITokenPayload, TokenPair } from './token.interface';
 
+type Miliseconds = number;
 @Injectable()
 export class TokenService {
   constructor(
@@ -32,13 +33,16 @@ export class TokenService {
     );
 
     const current = Date.now();
+
+    const accessTokenExpiresIn: Miliseconds =
+      +this.configService.get('secret.access_token_expires_in') * 1000;
+    const refreshTokenExpiresIn: Miliseconds =
+      +this.configService.get('secret.refresh_token_expires_in') * 1000;
     return {
       accessToken,
-      accessTokenExpiresAt: new Date(
-        current + +this.configService.get('secret.access_token_expires_in'),
-      ),
+      accessTokenExpiresAt: new Date(current + accessTokenExpiresIn),
       refreshToken,
-      refreshTokenExpiresAt: new Date(),
+      refreshTokenExpiresAt: new Date(current + refreshTokenExpiresIn),
     };
   }
 
