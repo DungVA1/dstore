@@ -21,6 +21,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
   constructor(
     @Inject('IAccountRepository')
     private readonly repo: IAccountRepository,
+    private readonly encryptionLib: EncryptionLib,
   ) {}
 
   async execute(command: VerifyTokenCommand) {
@@ -44,7 +45,7 @@ export class VerifyTokenHandler implements ICommandHandler<VerifyTokenCommand> {
     if (!verificationToken) {
       throw new VerificationTokenIsWrongOrExpired();
     }
-    const isValid = await EncryptionLib.compare(
+    const isValid = await this.encryptionLib.compare(
       token,
       verificationToken?.token,
     );

@@ -24,6 +24,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     private readonly tokenService: TokenService,
     private readonly loggerService: LoggerService,
     private readonly generatorService: GeneratorService,
+    private readonly encryptionLib: EncryptionLib,
   ) {
     this.loggerService.setContext(LoginHandler.name);
   }
@@ -38,7 +39,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
       throw new AccountIsNotActivedError();
     }
 
-    const isValid = await EncryptionLib.compare(
+    const isValid = await this.encryptionLib.compare(
       command.password,
       account.password,
     );
@@ -55,7 +56,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     await this.repo.invalidRefreshTokens(account.id.toString());
     await this.repo.createRefreshToken(
       this.generatorService.generateId(),
-      refreshToken,
+      await this.encryptionLib.hashString(refreshToken),
       account.id.toString(),
       refreshTokenExpiresAt,
     );

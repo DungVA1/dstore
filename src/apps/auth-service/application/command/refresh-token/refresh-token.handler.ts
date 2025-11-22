@@ -1,4 +1,5 @@
 import { SuccessResponse } from '@common/based.response';
+import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GeneratorService } from '@shared/generator/generator.service';
@@ -18,6 +19,7 @@ export class RefreshTokenHandler
     private readonly repo: IAccountRepository,
     private readonly tokenService: TokenService,
     private readonly generatorService: GeneratorService,
+    private readonly encryptionLib: EncryptionLib,
   ) {}
   async execute(command: RefreshTokenCommand): Promise<any> {
     const tokenPayload = this.tokenService.decode(command.refreshToken) as {
@@ -32,7 +34,13 @@ export class RefreshTokenHandler
       tokenPayload.accountId,
     );
 
-    if (!refreshToken) {
+    if (
+      !refreshToken ||
+      !(await this.encryptionLib.compare(
+        command.refreshToken,
+        refreshToken.token,
+      ))
+    ) {
       throw new RefreshTokenIsInvalid();
     }
 
@@ -43,7 +51,7 @@ export class RefreshTokenHandler
     await this.repo.invalidRefreshTokens(tokenPayload.accountId);
     await this.repo.createRefreshToken(
       this.generatorService.generateId(),
-      token.refreshToken,
+      await this.encryptionLib.hashString(token.refreshToken),
       tokenPayload.accountId,
       token.refreshTokenExpiresAt,
     );

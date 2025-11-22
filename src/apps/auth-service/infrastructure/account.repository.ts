@@ -90,14 +90,14 @@ export class AccountRepository implements IAccountRepository {
   }
   createRefreshToken(
     id: string,
-    refreshToken: string,
+    token: string,
     accountId: string,
     expiredAt: Date,
   ) {
     return this.refreshTokenModel.save({
       id,
       accountId,
-      refreshToken,
+      token,
       expiredAt,
       createdAt: new Date(),
     });

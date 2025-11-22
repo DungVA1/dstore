@@ -14,7 +14,7 @@ export interface IAccountRepository {
   getRefreshToken(accountId: string): Promise<RefreshTokenModel | null>;
   createRefreshToken(
     id: string,
-    refreshToken: string,
+    token: string,
     accountId: string,
     expiredAt: Date,
   );

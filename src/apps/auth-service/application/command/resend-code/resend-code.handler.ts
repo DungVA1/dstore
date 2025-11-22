@@ -22,6 +22,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
     private readonly repo: IAccountRepository,
     private readonly generatorService: GeneratorService,
     private readonly notificationService: NotificationService,
+    private readonly encryptionLib: EncryptionLib,
   ) {}
 
   async execute(command: ResendCodeCommand): Promise<any> {
@@ -40,7 +41,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
     this.repo.createVerificationToken(
       this.generatorService.generateId(),
       account.id.toString(),
-      await EncryptionLib.hashString(verificationCode),
+      await this.encryptionLib.hashString(verificationCode),
     );
 
     this.notificationService.send('Email', {

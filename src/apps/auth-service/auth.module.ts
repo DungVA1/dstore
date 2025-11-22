@@ -1,3 +1,4 @@
+import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -35,6 +36,7 @@ import { AuthController } from './presentation/auth.controller';
   ],
   controllers: [AuthController],
   providers: [
+    EncryptionLib,
     {
       provide: LoggerService,
       useValue: new LoggerService('AuthModule'),

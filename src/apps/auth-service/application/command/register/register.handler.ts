@@ -19,6 +19,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     private readonly repo: IAccountRepository,
     private readonly generatorService: GeneratorService,
     private readonly notificationService: NotificationService,
+    private readonly encryptionLib: EncryptionLib,
   ) {}
 
   async execute(command: RegisterCommand): Promise<any> {
@@ -32,7 +33,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     const accountEntity = AccountEntity.create({
       id: this.generatorService.generateId(),
       email: command.email,
-      password: await EncryptionLib.hashString(command.password),
+      password: await this.encryptionLib.hashString(command.password),
       verificationTokens: [
         {
           id: this.generatorService.generateId(),
@@ -41,7 +42,7 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
           expiredAt: new Date(
             current.setTime(current.getTime() + 5 * 60 * 1000),
           ),
-          token: await EncryptionLib.hashString(verificationCode),
+          token: await this.encryptionLib.hashString(verificationCode),
         },
       ],
     });

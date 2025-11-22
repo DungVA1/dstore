@@ -33,7 +33,7 @@ export class RefreshTokenModel extends BasedModel {
     unique: true,
     nullable: false,
   })
-  refreshToken: string;
+  token: string;
 
   @Column({
     name: 'expired_at',
