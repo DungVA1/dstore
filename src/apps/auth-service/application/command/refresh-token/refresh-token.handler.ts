@@ -3,6 +3,7 @@ import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GeneratorService } from '@shared/generator/generator.service';
+import { TokenPayload } from '@shared/token/token.interface';
 import { TokenService } from '@shared/token/token.service';
 
 import { RefreshTokenIsInvalid } from '../../account-application.error';
@@ -22,9 +23,9 @@ export class RefreshTokenHandler
     private readonly encryptionLib: EncryptionLib,
   ) {}
   async execute(command: RefreshTokenCommand): Promise<any> {
-    const tokenPayload = this.tokenService.decode(command.refreshToken) as {
-      accountId: string;
-    };
+    const tokenPayload: TokenPayload = await this.tokenService.validateToken(
+      command.refreshToken,
+    );
 
     if (!tokenPayload) {
       throw new RefreshTokenIsInvalid();

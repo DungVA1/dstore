@@ -9,11 +9,9 @@ import { TokenService } from './token.service';
   imports: [
     JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: () => {
+      useFactory: (configService: ConfigService) => {
         return {
-          signOptions: {
-            algorithm: 'HS256' as const,
-          },
+          secret: configService.get<string>('secret.jwt'),
         };
       },
     }),

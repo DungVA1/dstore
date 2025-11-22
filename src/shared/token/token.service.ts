@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 
-import { ITokenPayload, TokenPair } from './token.interface';
+import { TokenPair, TokenPayload } from './token.interface';
 
 type Miliseconds = number;
 @Injectable()
@@ -12,10 +12,9 @@ export class TokenService {
     private readonly jwt: JwtService,
     private readonly configService: ConfigService,
   ) {}
-  async generateToken(payload: ITokenPayload): Promise<TokenPair> {
+  async generateToken(payload: TokenPayload): Promise<TokenPair> {
     const jwtId = crypto.randomBytes(16).toString('hex');
     const accessToken = await this.jwt.signAsync(payload, {
-      secret: this.configService.get('secret.jwt'),
       expiresIn: +this.configService.get('secret.access_token_expires_in'),
       jwtid: jwtId,
     });
@@ -26,7 +25,6 @@ export class TokenService {
         accountId: payload.accountId,
       },
       {
-        secret: this.configService.get('secret.jwt'),
         expiresIn: +this.configService.get('secret.refresh_token_expires_in'),
         jwtid: jwtId,
       },
@@ -46,15 +44,9 @@ export class TokenService {
     };
   }
 
-  async validateToken(token: string): Promise<ITokenPayload> {
-    const payload: ITokenPayload = await this.jwt.verifyAsync(token, {
-      secret: this.configService.get('secret.jwt'),
-    });
+  async validateToken(token: string): Promise<TokenPayload> {
+    const payload: TokenPayload = await this.jwt.verifyAsync(token);
 
     return payload;
-  }
-
-  decode(token: string): Record<string, unknown> {
-    return this.jwt.decode(token);
   }
 }
