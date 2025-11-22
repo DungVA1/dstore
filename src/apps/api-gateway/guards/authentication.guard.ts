@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { CacheService } from '@shared/cache/cache.service';
 import { LoggerService } from '@shared/logger/logger.service';
 import { TokenPayload } from '@shared/token/token.interface';
 import { TokenService } from '@shared/token/token.service';
@@ -15,7 +14,6 @@ export class AuthGuard implements CanActivate {
     private readonly tokenService: TokenService,
     private readonly reflector: Reflector,
     private readonly logger: LoggerService,
-    private readonly cacheService: CacheService,
   ) {}
   async canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [

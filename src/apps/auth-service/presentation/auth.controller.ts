@@ -46,7 +46,7 @@ export class AuthController {
   }
 
   @MessagePattern('auth.logout')
-  logout(@Payload() { accountId, tokenId }: LogoutDTO) {
-    return this.commandBus.execute(new LogoutCommand(accountId, tokenId));
+  logout(@Payload() { accountId }: LogoutDTO) {
+    return this.commandBus.execute(new LogoutCommand(accountId));
   }
 }
