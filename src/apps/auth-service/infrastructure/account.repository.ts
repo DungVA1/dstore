@@ -102,7 +102,7 @@ export class AccountRepository implements IAccountRepository {
       createdAt: new Date(),
     });
   }
-  useRefreshToken(id: string) {
-    return this.refreshTokenModel.delete(id);
+  invalidRefreshTokens(accountId: string) {
+    return this.refreshTokenModel.delete({ accountId });
   }
 }

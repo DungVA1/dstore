@@ -18,5 +18,5 @@ export interface IAccountRepository {
     accountId: string,
     expiredAt: Date,
   );
-  useRefreshToken(id: string);
+  invalidRefreshTokens(accountId: string);
 }

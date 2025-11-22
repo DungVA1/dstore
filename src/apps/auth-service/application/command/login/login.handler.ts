@@ -4,6 +4,7 @@ import { SuccessResponse } from '@common/based.response';
 import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { GeneratorService } from '@shared/generator/generator.service';
 import { LoggerService } from '@shared/logger/logger.service';
 import { TokenService } from '@shared/token/token.service';
 
@@ -22,6 +23,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     @Inject('IAccountRepository') private readonly repo: IAccountRepository,
     private readonly tokenService: TokenService,
     private readonly loggerService: LoggerService,
+    private readonly generatorService: GeneratorService,
   ) {
     this.loggerService.setContext(LoginHandler.name);
   }
@@ -45,11 +47,19 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
       throw new EmailOrPasswordIsWrongError();
     }
 
-    const { accessToken, refreshToken } = await this.tokenService.generateToken(
-      {
+    const { accessToken, refreshToken, refreshTokenExpiresAt } =
+      await this.tokenService.generateToken({
         accountId: account.id.toString(),
-      },
+      });
+
+    await this.repo.invalidRefreshTokens(account.id.toString());
+    await this.repo.createRefreshToken(
+      this.generatorService.generateId(),
+      refreshToken,
+      account.id.toString(),
+      refreshTokenExpiresAt,
     );
+
     return new SuccessResponse({
       accessToken,
       refreshToken,

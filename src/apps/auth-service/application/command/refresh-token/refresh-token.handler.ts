@@ -40,7 +40,7 @@ export class RefreshTokenHandler
       accountId: tokenPayload.accountId,
     });
 
-    await this.repo.useRefreshToken(refreshToken.id);
+    await this.repo.invalidRefreshTokens(tokenPayload.accountId);
     await this.repo.createRefreshToken(
       this.generatorService.generateId(),
       token.refreshToken,
