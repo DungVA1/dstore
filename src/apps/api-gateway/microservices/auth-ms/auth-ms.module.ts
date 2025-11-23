@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { CacheModule } from '@shared/cache/cache.module';
 import { LoggerService } from '@shared/logger/logger.service';
 import { TokenModule } from '@shared/token/token.module';
 
@@ -24,6 +25,7 @@ import { AuthMSService } from './auth-ms.service';
       },
     ]),
     TokenModule,
+    CacheModule.forRoot(),
   ],
   controllers: [AuthMSController],
   providers: [AuthMSService, LoggerService],
