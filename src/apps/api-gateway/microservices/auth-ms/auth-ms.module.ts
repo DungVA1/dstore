@@ -16,16 +16,21 @@ import { AuthMSService } from './auth-ms.service';
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService): KafkaOptions => {
+          const appName: string = configService.get<string>('app.auth.name')!;
+
           return {
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: 'auth-client-id',
+                clientId: `${appName}-consumer-client-id`,
                 brokers: configService.get<string[]>('kafka.brokers') || [],
               },
-              consumer: {
-                groupId: 'auth-consumer-group-id',
+              producer: {
                 allowAutoTopicCreation: true,
+              },
+              consumer: {
+                allowAutoTopicCreation: true,
+                groupId: `${appName}-consumer-group-id`,
               },
             },
           };

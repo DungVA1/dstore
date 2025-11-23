@@ -2,11 +2,7 @@ import { RpcExceptionFilter } from '@libs/error-handler/rpc-exception.filter';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import {
-  MicroserviceOptions,
-  RpcException,
-  Transport,
-} from '@nestjs/microservices';
+import { KafkaOptions, RpcException, Transport } from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
 
 import { UserAppModule } from './user.module';
@@ -39,25 +35,31 @@ const bootstrap = async () => {
     }),
   );
   app.useGlobalFilters(new RpcExceptionFilter());
-  const port: number = configService.get('app.user.port') as number;
-  const msPort: number = configService.get('app.user.msPort') as number;
-  const appName: string = configService.get('app.user.name') as string;
-  app.connectMicroservice<MicroserviceOptions>(
+  const port: number = configService.get<number>('app.auth.port')!;
+  const appName: string = configService.get<string>('app.auth.name')!;
+  app.connectMicroservice<KafkaOptions>(
     {
-      transport: Transport.TCP,
+      transport: Transport.KAFKA,
       options: {
-        port: msPort,
+        client: {
+          clientId: `${appName}-consumer-client-id`,
+          brokers: configService.get<string[]>('kafka.brokers') || [],
+        },
+        consumer: {
+          groupId: `${appName}-consumer-group-id`,
+          allowAutoTopicCreation: true,
+        },
+        run: {
+          partitionsConsumedConcurrently: 1,
+        },
       },
     },
-    {
-      inheritAppConfig: true,
-    },
+    { inheritAppConfig: true },
   );
   await app.startAllMicroservices();
   await app.listen(port, () => {
     logger.log(`${appName} is running on port ${port}`);
   });
-  loggerService.log(`${appName} MicroService is running on port ${msPort}`);
 };
 
 bootstrap();

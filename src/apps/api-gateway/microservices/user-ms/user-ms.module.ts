@@ -13,15 +13,20 @@ import { UserMSService } from './user-ms.service';
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService): KafkaOptions => {
+          const appName: string = configService.get<string>('app.auth.name')!;
           return {
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: 'user-client-id',
+                clientId: `${appName}-consumer-client-id`,
                 brokers: configService.get<string[]>('kafka.brokers') || [],
               },
               consumer: {
-                groupId: 'user-consumer-group-id',
+                allowAutoTopicCreation: true,
+                groupId: `${appName}-consumer-group-id`,
+              },
+              producer: {
+                allowAutoTopicCreation: true,
               },
             },
           };

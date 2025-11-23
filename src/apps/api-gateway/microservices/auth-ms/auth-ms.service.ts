@@ -1,11 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthMSService {
   constructor(
-    @Inject('AUTH_SERVICE') private readonly authClient: ClientProxy,
+    @Inject('AUTH_SERVICE') private readonly authClient: ClientKafka,
   ) {}
+
+  async onModuleInit() {
+    // subcribe reply topics (auth.login.reply, auth.register.reply ...)
+    this.authClient.subscribeToResponseOf('auth.login');
+    this.authClient.subscribeToResponseOf('auth.register');
+    this.authClient.subscribeToResponseOf('auth.resendOtp');
+    this.authClient.subscribeToResponseOf('auth.verifyOtp');
+    this.authClient.subscribeToResponseOf('auth.refreshToken');
+    this.authClient.subscribeToResponseOf('auth.logout');
+    await this.authClient.connect();
+  }
 
   login(body) {
     return this.authClient.send('auth.login', body);
