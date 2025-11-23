@@ -13,3 +13,10 @@ export class UnauthenicationError extends GatewayError {
     super('UNAUTHENTICATION', 'token is valid or expired');
   }
 }
+
+export class TooManyRequestError extends GatewayError {
+  httpStatus: HttpStatus = HttpStatus.TOO_MANY_REQUESTS;
+  constructor() {
+    super('TOO_MANY_REQUESTS', 'Too many requests');
+  }
+}

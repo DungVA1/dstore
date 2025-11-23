@@ -6,6 +6,7 @@ import { LoggerService } from '@shared/logger/logger.service';
 import { TokenModule } from '@shared/token/token.module';
 
 import { AuthGuard } from './guards/authentication.guard';
+import { RateLimitGuard } from './guards/rate-limit.guard';
 import { AuthMSModule } from './microservices/auth-ms/auth-ms.module';
 import { UserMSModule } from './microservices/user-ms/user-ms.module';
 
@@ -22,6 +23,10 @@ import { UserMSModule } from './microservices/user-ms/user-ms.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RateLimitGuard,
     },
   ],
   controllers: [],

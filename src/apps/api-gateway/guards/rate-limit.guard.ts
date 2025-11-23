@@ -1,13 +1,10 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RateLimitService } from '@shared/cache/rate-limit-service';
 import { Request, Response } from 'express';
+import { RateLimiterRes } from 'rate-limiter-flexible';
 
+import { TooManyRequestError } from '../common/gateway.error';
 import {
   RATE_LIMIT_KEY,
   RateLimitOptions,
@@ -21,26 +18,35 @@ export class RateLimitGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
-    const options: RateLimitOptions =
+    let options: RateLimitOptions =
       this.reflector.getAllAndOverride<RateLimitOptions>(RATE_LIMIT_KEY, [
         context.getClass(),
         context.getHandler(),
       ]);
 
     if (!options) {
-      return true;
+      options = {
+        points: 1,
+      };
     }
 
     const ctx = context.switchToHttp();
     const req: Request = ctx.getRequest();
+    const res: Response = ctx.getResponse();
 
     const key = options.key ? options.key(req) : (req.ip as string);
 
     const allowed = await this.rateLimitService.consume(key, options.points);
 
     if (!allowed) {
-      throw new ForbiddenException('Too many request');
+      res.appendHeader('Retry-After', '60000');
+      throw new TooManyRequestError();
     }
+
+    res.appendHeader(
+      'X-Remainig-Point',
+      (allowed as RateLimiterRes).remainingPoints.toString(),
+    );
 
     return true;
   }

@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import type { Redis } from 'ioredis';
-import { RateLimiterRedis } from 'rate-limiter-flexible';
+import { RateLimiterRedis, RateLimiterRes } from 'rate-limiter-flexible';
 
 @Injectable()
 export class RateLimitService {
@@ -17,11 +17,17 @@ export class RateLimitService {
     });
   }
 
-  async consume(key: string, points?: number) {
+  async consume(
+    key: string,
+    points?: number,
+  ): Promise<boolean | RateLimiterRes> {
     try {
-      // number of point will consume, if total - consumer > 0 then return true, else falsee
-      await this.rateLimiter.consume(key, points);
-      return true;
+      // number of point will consume, if total - consumer > 0 then return true, else false
+      const rateLimiterInfo: RateLimiterRes = await this.rateLimiter.consume(
+        key,
+        points,
+      );
+      return rateLimiterInfo;
     } catch {
       return false;
     }
