@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule, KafkaOptions, Transport } from '@nestjs/microservices';
 
 import { UserMSController } from './user-ms.controller';
 import { UserMSService } from './user-ms.service';
@@ -12,13 +12,20 @@ import { UserMSService } from './user-ms.service';
         name: 'USER_SERVICE',
         imports: [ConfigModule],
         inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
-          options: {
-            host: configService.get<string>('app.user.host'),
-            port: configService.get<number>('app.user.msPort'),
-          },
-        }),
+        useFactory: (configService: ConfigService): KafkaOptions => {
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: 'user-client-id',
+                brokers: configService.get<string[]>('kafka.brokers') || [],
+              },
+              consumer: {
+                groupId: 'user-consumer-group-id',
+              },
+            },
+          };
+        },
       },
     ]),
   ],

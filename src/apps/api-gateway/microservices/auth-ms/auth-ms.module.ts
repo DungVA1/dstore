@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule, KafkaOptions, Transport } from '@nestjs/microservices';
 import { CacheModule } from '@shared/cache/cache.module';
 import { LoggerService } from '@shared/logger/logger.service';
 import { TokenModule } from '@shared/token/token.module';
@@ -15,13 +15,21 @@ import { AuthMSService } from './auth-ms.service';
         name: 'AUTH_SERVICE',
         imports: [ConfigModule],
         inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
-          options: {
-            host: configService.get<string>('app.auth.host'),
-            port: configService.get<number>('app.auth.msPort'),
-          },
-        }),
+        useFactory: (configService: ConfigService): KafkaOptions => {
+          return {
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: 'auth-client-id',
+                brokers: configService.get<string[]>('kafka.brokers') || [],
+              },
+              consumer: {
+                groupId: 'auth-consumer-group-id',
+                allowAutoTopicCreation: true,
+              },
+            },
+          };
+        },
       },
     ]),
     TokenModule,

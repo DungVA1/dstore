@@ -39,4 +39,10 @@ export default () => ({
     port: process.env.REDIS_PORT,
     password: process.env.REDIS_PASSWORD,
   },
+  kafka: {
+    brokers: process.env.KAFKA_HOST?.split(',').map(
+      (host) => `${host}:${process.env.KAFKA_PORT}`,
+    ),
+    port: process.env.KAFKA_PORT,
+  },
 });
