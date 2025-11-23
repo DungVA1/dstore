@@ -35,8 +35,8 @@ const bootstrap = async () => {
     }),
   );
   app.useGlobalFilters(new RpcExceptionFilter());
-  const port: number = configService.get<number>('app.auth.port')!;
-  const appName: string = configService.get<string>('app.auth.name')!;
+  const port: number = configService.get<number>('app.user.port')!;
+  const appName: string = configService.get<string>('app.user.name')!;
   app.connectMicroservice<KafkaOptions>(
     {
       transport: Transport.KAFKA,

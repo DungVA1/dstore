@@ -22,7 +22,7 @@ import { AuthMSService } from './auth-ms.service';
             transport: Transport.KAFKA,
             options: {
               client: {
-                clientId: `${appName}-consumer-client-id`,
+                clientId: `${appName}-gw-consumer-client-id`,
                 brokers: configService.get<string[]>('kafka.brokers') || [],
               },
               producer: {
@@ -30,7 +30,7 @@ import { AuthMSService } from './auth-ms.service';
               },
               consumer: {
                 allowAutoTopicCreation: true,
-                groupId: `${appName}-consumer-group-id`,
+                groupId: `${appName}-gw-consumer-group-id`,
               },
             },
           };

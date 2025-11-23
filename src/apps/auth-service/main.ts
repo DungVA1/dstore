@@ -47,7 +47,6 @@ const bootstrap = async () => {
         },
         consumer: {
           groupId: `${appName}-consumer-group-id`,
-          allowAutoTopicCreation: true,
         },
         run: {
           partitionsConsumedConcurrently: 1,
