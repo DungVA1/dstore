@@ -1,53 +1,23 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { RateLimitService } from '@shared/cache/rate-limit-service';
-import { Request, Response } from 'express';
-import { RateLimiterRes } from 'rate-limiter-flexible';
+// custom-throttler.guard.ts
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ThrottlerGuard, ThrottlerLimitDetail } from '@nestjs/throttler';
+import { Response } from 'express';
 
 import { TooManyRequestError } from '../common/gateway.error';
-import {
-  RATE_LIMIT_KEY,
-  RateLimitOptions,
-} from '../decorators/rate-limit.decorator';
 
 @Injectable()
-export class RateLimitGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly rateLimitService: RateLimitService,
-  ) {}
-
-  async canActivate(context: ExecutionContext) {
-    let options: RateLimitOptions =
-      this.reflector.getAllAndOverride<RateLimitOptions>(RATE_LIMIT_KEY, [
-        context.getClass(),
-        context.getHandler(),
-      ]);
-
-    if (!options) {
-      options = {
-        points: 1,
-      };
-    }
-
-    const ctx = context.switchToHttp();
-    const req: Request = ctx.getRequest();
-    const res: Response = ctx.getResponse();
-
-    const key = options.key ? options.key(req) : (req.ip as string);
-
-    const allowed = await this.rateLimitService.consume(key, options.points);
-
-    if (!allowed) {
-      res.appendHeader('Retry-After', '60000');
-      throw new TooManyRequestError();
-    }
-
-    res.appendHeader(
-      'X-Remainig-Point',
-      (allowed as RateLimiterRes).remainingPoints.toString(),
+export class RateLimitGuard extends ThrottlerGuard {
+  protected throwThrottlingException(
+    context: ExecutionContext,
+    throttlerLimitDetail: ThrottlerLimitDetail,
+  ): Promise<void> {
+    const response: Response = context.switchToHttp().getResponse();
+    response.header(
+      'X-RateLimit-Reset',
+      throttlerLimitDetail.timeToBlockExpire.toString(),
     );
-
-    return true;
+    response.header('X-RateLimit-Limit', throttlerLimitDetail.limit.toString());
+    response.header('X-RateLimit-TTL', throttlerLimitDetail.ttl.toString());
+    throw new TooManyRequestError();
   }
 }

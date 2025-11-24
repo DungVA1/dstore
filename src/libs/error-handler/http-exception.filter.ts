@@ -13,7 +13,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-
     if (exception && typeof exception === 'object' && 'ok' in exception) {
       const statusCode = (exception as { ok: boolean; httpStatus: number })
         .httpStatus;
@@ -25,7 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const responseBody = exception.getResponse();
       return response.status(status).json({
         ok: false,
-        code: status,
+        httpStatus: status,
         error: responseBody,
       });
     }

@@ -1,6 +1,7 @@
+import { RateLimitGuard } from '@apps/api-gateway/guards/rate-limit.guard';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: RateLimitGuard,
     },
   ],
 })
