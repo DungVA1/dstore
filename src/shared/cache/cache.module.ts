@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from '@nestjs-modules/ioredis';
 
 import { CacheService } from './cache.service';
-import { RateLimitService } from './rate-limit-service';
 
 @Module({
   imports: [
@@ -22,8 +21,8 @@ import { RateLimitService } from './rate-limit-service';
       },
     }),
   ],
-  providers: [CacheService, RateLimitService],
-  exports: [CacheService, RateLimitService],
+  providers: [CacheService],
+  exports: [CacheService],
 })
 export class CacheModule {
   static forRoot() {
