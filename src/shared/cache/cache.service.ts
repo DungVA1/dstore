@@ -9,11 +9,11 @@ import type { Redis } from 'ioredis';
 export class CacheService {
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
-  async get(key: string): Promise<string | null> {
+  async get(key: string): Promise<any> {
     return await this.redis.get(key);
   }
 
-  async set(key: string, value: string, ttl?: number): Promise<'OK' | null> {
+  async set(key: string, value: any, ttl?: number): Promise<'OK' | null> {
     if (ttl) {
       return await this.redis.set(key, value, 'EX', ttl);
     }

@@ -4,12 +4,14 @@ import { SuccessResponse } from '@common/based.response';
 import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CacheService } from '@shared/cache/cache.service';
 import { GeneratorService } from '@shared/generator/generator.service';
 import { NotificationService } from '@shared/notification/notification.service';
 
 import {
   AccountAlreadyActivedError,
   EmailNotExistedError,
+  RateLimitExceeded,
 } from '../../account-application.error';
 import { IAccountRepository } from '../../account-repository.interface';
 
@@ -23,9 +25,29 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
     private readonly generatorService: GeneratorService,
     private readonly notificationService: NotificationService,
     private readonly encryptionLib: EncryptionLib,
+    private readonly cacheService: CacheService,
   ) {}
 
+  private async verifyLimit(key: string) {
+    const lastSent = (await this.cacheService.get(key)) as number;
+    if (lastSent) {
+      const isLimited = Date.now() - 30000 <= lastSent;
+
+      if (isLimited) {
+        throw new RateLimitExceeded();
+      }
+    }
+  }
+
+  private async setLimit(key: string) {
+    const lastSend = Date.now();
+    await this.cacheService.set(key, lastSend);
+  }
+
   async execute(command: ResendCodeCommand): Promise<SuccessResponse> {
+    const key = `resendOtp:${command.email}`;
+    await this.verifyLimit(key);
+
     const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {
       throw new EmailNotExistedError();
@@ -49,6 +71,7 @@ export class ResendCodeHandler implements ICommandHandler<ResendCodeCommand> {
       content: verificationCode,
     });
 
+    await this.setLimit(key);
     return new SuccessResponse();
   }
 }

@@ -28,11 +28,10 @@ export default () => ({
     password: process.env.POSTGRESQL_PASSWORD,
     database: process.env.POSTGRESQL_DATABASE,
   },
-  secret: {
-    jwt: process.env.JWT_SECRET,
+  jwt: {
+    secret: process.env.JWT_SECRET,
     access_token_expires_in: 15 * 60, //15m in second
     refresh_token_expires_in: 30 * 24 * 60 * 60, // 30d in second
-    otp: process.env.OTP_SECRET,
   },
   redis: {
     host: process.env.REDIS_HOST,

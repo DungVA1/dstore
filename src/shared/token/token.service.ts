@@ -16,7 +16,7 @@ export class TokenService {
   async generateToken(payload: TokenPayload): Promise<TokenPair> {
     const jwtId = crypto.randomBytes(16).toString('hex');
     const accessToken = await this.jwt.signAsync(payload, {
-      expiresIn: +this.configService.get('secret.access_token_expires_in'),
+      expiresIn: +this.configService.get('jwt.access_token_expires_in'),
       jwtid: jwtId,
     });
     const refreshToken = await this.jwt.signAsync(
@@ -26,7 +26,7 @@ export class TokenService {
         accountId: payload.accountId,
       },
       {
-        expiresIn: +this.configService.get('secret.refresh_token_expires_in'),
+        expiresIn: +this.configService.get('jwt.refresh_token_expires_in'),
         jwtid: jwtId,
       },
     );
@@ -34,9 +34,9 @@ export class TokenService {
     const current = Date.now();
 
     const accessTokenExpiresIn: Miliseconds =
-      +this.configService.get('secret.access_token_expires_in') * 1000;
+      +this.configService.get('jwt.access_token_expires_in') * 1000;
     const refreshTokenExpiresIn: Miliseconds =
-      +this.configService.get('secret.refresh_token_expires_in') * 1000;
+      +this.configService.get('jwt.refresh_token_expires_in') * 1000;
     return {
       accessToken,
       accessTokenExpiresAt: new Date(current + accessTokenExpiresIn),

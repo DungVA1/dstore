@@ -91,3 +91,13 @@ export class RefreshTokenIsInvalid extends AccountApplicationError {
     );
   }
 }
+
+export class RateLimitExceeded extends AccountApplicationError {
+  constructor() {
+    super(
+      'RATE_LIMIT_EXCEEDED',
+      'Rate limit exceeded. Please try again',
+      HttpStatus.TOO_MANY_REQUESTS,
+    );
+  }
+}

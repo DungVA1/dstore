@@ -11,7 +11,7 @@ import { TokenService } from './token.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
-          secret: configService.get<string>('secret.jwt'),
+          secret: configService.get<string>('jwt.secret'),
         };
       },
     }),
