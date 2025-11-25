@@ -23,6 +23,7 @@
       "@common/*": ["src/common/*"],
       "@libs/*": ["src/libs/*"],
       "@shared/*": ["src/shared/*"],
+      "@dto/*": ["src/common/dto/*"]
     }
   },
   "include": ["src/**/*", "src/apps/user-service/application/command/create-user/.ts"]

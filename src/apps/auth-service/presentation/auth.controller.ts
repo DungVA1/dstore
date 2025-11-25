@@ -1,3 +1,9 @@
+import { LoginDTO } from '@dto/auth/login.dto';
+import { LogoutDTO } from '@dto/auth/logout.dto';
+import { RefreshTokenDTO } from '@dto/auth/refresh-token.dto';
+import { RegisterDTO } from '@dto/auth/register.dto';
+import { ResendOtpDTO } from '@dto/auth/resend-otp.dto';
+import { VerifyTokenDTO } from '@dto/auth/verify-otp.dto';
 import { Controller } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { MessagePattern, Payload } from '@nestjs/microservices';
@@ -8,13 +14,6 @@ import { RefreshTokenCommand } from '../application/command/refresh-token/refres
 import { RegisterCommand } from '../application/command/register/register.command';
 import { ResendCodeCommand } from '../application/command/resend-code/resend-code.command';
 import { VerifyOtpCommand } from '../application/command/verify-otp/verify-otp.command';
-
-import { LoginDTO } from './dto/login.dto';
-import { LogoutDTO } from './dto/logout.dto';
-import { RefreshTokenDTO } from './dto/refresh-token.dto';
-import { RegisterDTO } from './dto/register.dto';
-import { ResendOtpDTO } from './dto/resend-otp.dto';
-import { VerifyTokenDTO } from './dto/verify-otp.dto';
 
 @Controller()
 export class AuthController {

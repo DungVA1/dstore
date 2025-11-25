@@ -1,4 +1,7 @@
 import { SuccessResponse } from '@common/based.response';
+import { CreateUserDTO } from '@dto/user/create-user.dto';
+import { GetListUserQueryDTO } from '@dto/user/get-list-users.dto';
+import { UpdateUserDTO } from '@dto/user/update-user.dto';
 import { Body, Controller, Param } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { MessagePattern, Payload } from '@nestjs/microservices';
@@ -9,10 +12,6 @@ import { UpdateUserCommand } from '../application/command/update-user/update-use
 import { GetUsersQuery } from '../application/query';
 import { GetUserQuery } from '../application/query/get-user/get-user.query';
 import { UserEntity } from '../domain/user.entity';
-
-import { CreateUserDTO } from './dto/create-user.dto';
-import { GetListUserQueryDTO } from './dto/get-list-users.dto';
-import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller()
 export class UserController {
