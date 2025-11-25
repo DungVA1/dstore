@@ -11,14 +11,16 @@ import { CacheService } from './cache.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          type: 'cluster',
+          type: 'single',
           nodes: [
             {
               host: configService.get<string>('redis.host'),
               port: configService.get<number>('redis.port'),
-              password: configService.get<string>('redis.password'),
             },
           ],
+          options: {
+            password: configService.get<string>('redis.password'),
+          },
         };
       },
     }),
