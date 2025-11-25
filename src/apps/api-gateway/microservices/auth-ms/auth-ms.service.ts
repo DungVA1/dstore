@@ -1,3 +1,8 @@
+import { LoginDTO } from '@common/dto/auth/login.dto';
+import { RefreshTokenDTO } from '@common/dto/auth/refresh-token.dto';
+import { RegisterDTO } from '@common/dto/auth/register.dto';
+import { ResendOtpDTO } from '@common/dto/auth/resend-otp.dto';
+import { VerifyTokenDTO } from '@common/dto/auth/verify-otp.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
@@ -22,27 +27,27 @@ export class AuthMSService {
     this.loggerService.log('Subcribed reply topic ....');
   }
 
-  login(body) {
+  login(body: LoginDTO) {
     return this.authClient.send('auth.login', body);
   }
 
-  register(body) {
+  register(body: RegisterDTO) {
     return this.authClient.send('auth.register', body);
   }
 
-  resendOtp(body) {
+  resendOtp(body: ResendOtpDTO) {
     return this.authClient.send('auth.resendOtp', body);
   }
 
-  verifyOtp(body) {
+  verifyOtp(body: VerifyTokenDTO) {
     return this.authClient.send('auth.verifyOtp', body);
   }
 
-  refreshToken(body) {
+  refreshToken(body: RefreshTokenDTO) {
     return this.authClient.send('auth.refreshToken', body);
   }
 
-  logout(body) {
+  logout(body: { accountId: string }) {
     return this.authClient.send('auth.logout', body);
   }
 }

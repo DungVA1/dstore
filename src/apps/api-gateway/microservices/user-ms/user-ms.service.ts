@@ -1,3 +1,4 @@
+import { GetListUserQueryDTO } from '@common/dto/user/get-list-users.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 
@@ -14,7 +15,7 @@ export class UserMSService {
     await this.userClient.connect();
   }
 
-  getUsers(query) {
+  getUsers(query: GetListUserQueryDTO) {
     return this.userClient.send('user.getAll', query);
   }
 }
