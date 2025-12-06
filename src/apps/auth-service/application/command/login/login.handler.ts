@@ -1,5 +1,6 @@
 import { AccountStatus } from '@apps/auth-service/common/account.enum';
 import { AccountMapper } from '@apps/auth-service/infrastructure/account.mapper';
+import { ApplicationError } from '@common/based.error';
 import { SuccessResponse } from '@common/based.response';
 import { EncryptionLib } from '@libs/encrypt/encryption.lib';
 import { Inject } from '@nestjs/common';
@@ -17,6 +18,11 @@ import { IAccountRepository } from '../../account-repository.interface';
 
 import { LoginCommand } from './login.command';
 
+class LoginResponseData {
+  accessToken: string;
+  refreshToken: string;
+}
+
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
   constructor(
@@ -28,7 +34,9 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
   ) {
     this.loggerService.setContext(LoginHandler.name);
   }
-  async execute(command: LoginCommand): Promise<any> {
+  async execute(
+    command: LoginCommand,
+  ): Promise<SuccessResponse<LoginResponseData> | ApplicationError> {
     const accountModel = await this.repo.getByEmail(command.email);
     if (!accountModel) {
       throw new EmailNotExistedError();
@@ -61,7 +69,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
       refreshTokenExpiresAt,
     );
 
-    return new SuccessResponse({
+    return new SuccessResponse<LoginResponseData>({
       accessToken,
       refreshToken,
     });
