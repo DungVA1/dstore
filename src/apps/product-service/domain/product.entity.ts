@@ -57,6 +57,10 @@ export class ProductEntity extends BasedEntity {
     this._name = name;
   }
 
+  inStock() {
+    return this._quantity > 0;
+  }
+
   get id() {
     return this._id;
   }
