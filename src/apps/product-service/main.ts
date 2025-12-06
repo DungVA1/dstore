@@ -5,13 +5,15 @@ import { NestFactory } from '@nestjs/core';
 import { KafkaOptions, RpcException, Transport } from '@nestjs/microservices';
 import { LoggerService } from '@shared/logger/logger.service';
 
-import { UserAppModule } from './user.module';
+import { ProductModule } from './product.module';
 
-const bootstrap = async () => {
-  const app = await NestFactory.create(UserAppModule);
+async function bootstrap() {
+  const app = await NestFactory.create(ProductModule);
   const configService = app.get(ConfigService);
+  const port: number = configService.get<number>('app.product.port')!;
+  const appName = configService.get<string>('app.product.name');
   const loggerService = app.get(LoggerService);
-  loggerService.setContext('User');
+  loggerService.setContext(appName);
   app.useLogger(loggerService);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
@@ -35,8 +37,7 @@ const bootstrap = async () => {
     }),
   );
   app.useGlobalFilters(new RpcExceptionFilter());
-  const port: number = configService.get<number>('app.user.port')!;
-  const appName: string = configService.get<string>('app.user.name')!;
+
   app.connectMicroservice<KafkaOptions>(
     {
       transport: Transport.KAFKA,
@@ -49,17 +50,21 @@ const bootstrap = async () => {
           groupId: `${appName}-consumer-group-id`,
           allowAutoTopicCreation: true,
         },
-        run: {
-          partitionsConsumedConcurrently: 1,
+        producer: {
+          idempotent: true,
+          allowAutoTopicCreation: true,
         },
       },
     },
-    { inheritAppConfig: true },
+    {
+      inheritAppConfig: true,
+    },
   );
+
   await app.startAllMicroservices();
   await app.listen(port, () => {
     loggerService.log(`${appName} is running on port ${port}`);
   });
-};
+}
 
 bootstrap();

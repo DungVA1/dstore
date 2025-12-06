@@ -29,6 +29,12 @@
       "root": "src/apps/order-service",
       "entryFile": "apps/order-service/main",
       "sourceRoot": "src"
+    },
+    "product": {
+      "type": "application",
+      "root": "src/apps/product-service",
+      "entryFile": "apps/product-service/main",
+      "sourceRoot": "src"
     }
   }
 }

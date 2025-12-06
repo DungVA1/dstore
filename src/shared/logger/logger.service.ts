@@ -9,8 +9,8 @@ export class LoggerService extends ConsoleLogger {
     this.context = context;
   }
 
-  setContext(context: string): void {
-    this.context = context;
+  setContext(context?: string): void {
+    this.context = context ?? this.context;
   }
 
   log(message: unknown): void {

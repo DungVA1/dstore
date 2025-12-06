@@ -20,6 +20,13 @@ export default () => ({
       port: process.env.USER_SERVICE_PORT || 3002,
       msPort: process.env.USER_SERVICE_MS_PORT || 4002,
     },
+    product: {
+      prefix: 'product',
+      name: 'PRODUCT_SERVICE',
+      host: process.env.PRODUCT_SERVICE_HOST || 'localhost',
+      port: process.env.PRODUCT_SERVICE_PORT || 3003,
+      msPort: process.env.PRODUCT_SERVICE_MS_PORT || 4003,
+    },
   },
   database: {
     host: process.env.POSTGRESQL_HOST,
