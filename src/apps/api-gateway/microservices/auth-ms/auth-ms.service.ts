@@ -14,7 +14,7 @@ export class AuthMSService {
     private readonly loggerService: LoggerService,
   ) {}
 
-  async onModuleInit() {
+  protected async onModuleInit() {
     this.loggerService.log('Subcribing reply topic ....');
     // subcribe reply topics (auth.login.reply, auth.register.reply ...)
     this.authClient.subscribeToResponseOf('auth.login');
