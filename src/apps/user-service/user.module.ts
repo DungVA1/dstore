@@ -3,7 +3,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfigModule } from '@shared/config/config.module';
 import { DatabaseModule } from '@shared/database/database.module';
-import { LoggerService } from '@shared/logger/logger.service';
+import { LoggerModule } from '@shared/logger/logger.module';
 
 import { CreateUserHandler } from './application/command/create-user/create-user.handler';
 import { DeleteUserHandler } from './application/command/delete-user/delete-user.handler';
@@ -19,10 +19,10 @@ import { UserController } from './presentation/user.controller';
     AppConfigModule,
     DatabaseModule,
     TypeOrmModule.forFeature([UserModel]),
+    LoggerModule,
   ],
   controllers: [UserController],
   providers: [
-    LoggerService,
     {
       provide: 'IUserRepository',
       useClass: UserRepository,
